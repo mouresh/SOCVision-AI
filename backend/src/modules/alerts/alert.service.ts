@@ -23,6 +23,14 @@ export class AlertService {
   }
 
   async createAlert(dto: CreateAlertDto): Promise<Alert> {
+    if (dto.externalId) {
+      const existing = await this.repository.findByExternalId(dto.externalId);
+      if (existing) {
+        logger.debug({ externalId: dto.externalId }, 'service: alert already exists, skipping creation');
+        return existing;
+      }
+    }
+
     logger.info({ source: dto.source, title: dto.title }, 'service: creating new alert');
     
     let alert = await this.repository.create(dto);

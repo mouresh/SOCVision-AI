@@ -9,6 +9,12 @@ export class AlertRepository {
     return mapDbToAlert(res.rows[0]);
   }
 
+  async findByExternalId(externalId: string): Promise<Alert | null> {
+    const res = await query('SELECT * FROM alerts WHERE external_id = $1', [externalId]);
+    if (res.rows.length === 0) return null;
+    return mapDbToAlert(res.rows[0]);
+  }
+
   async create(dto: CreateAlertDto): Promise<Alert> {
     const sql = `
       INSERT INTO alerts (
@@ -16,6 +22,7 @@ export class AlertRepository {
         source_rule_id, source_rule_name, asset_id, agent_id, assigned_to,
         risk_score, raw_event, enrichment, tags, fired_at, risk_level
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
+      ON CONFLICT (external_id) DO NOTHING
       RETURNING *
     `;
     const values = [
@@ -38,6 +45,13 @@ export class AlertRepository {
       dto.riskLevel || null
     ];
     const res = await query(sql, values);
+    if (res.rows.length === 0) {
+      if (dto.externalId) {
+        const existing = await this.findByExternalId(dto.externalId);
+        if (existing) return existing;
+      }
+      throw new Error('Failed to create alert: unique constraint conflict but unable to retrieve existing alert');
+    }
     return mapDbToAlert(res.rows[0]);
   }
 

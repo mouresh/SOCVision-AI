@@ -8,7 +8,7 @@ echo Starting local backend server in a new window...
 start cmd /k "start-backend.bat"
 
 echo Starting local frontend server in a new window...
-start cmd /k "cd frontend && npm.cmd run dev"
+start cmd /k "cd frontend && set PORT=5173 && npm.cmd run dev"
 
 echo ===================================================
 echo Both services launched! 
