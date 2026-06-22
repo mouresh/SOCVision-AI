@@ -40,11 +40,16 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      console.log(`[SSR Server] Incoming Request: ${request.method} ${request.url}`);
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
+      
+      const bodyText = await response.clone().text();
+      console.log(`[SSR Server] Response: Status ${response.status}, Content-Length: ${bodyText.length}, Body: ${JSON.stringify(bodyText)}`);
+      
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
-      console.error(error);
+      console.error("[SSR Server] Catastrophic Error:", error);
       return new Response(renderErrorPage(), {
         status: 500,
         headers: { "content-type": "text/html; charset=utf-8" },
