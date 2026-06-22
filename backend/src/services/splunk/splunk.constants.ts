@@ -20,9 +20,21 @@ export const EVENT_ID_DESCRIPTIONS: Record<string, string> = {
   '7045': 'A service was installed in the system',
 };
 
+import { env } from '../../config/env';
+
+export const getSplunkQueries = () => {
+  const index = env.SPLUNK_INDEX || 'soc';
+  return {
+    RECENT_EVENTS: `search index=${index} (EventCode IN (4624, 4625, 4672, 4688, 4720, 4728, 4740, 7045) OR EventID IN (4624, 4625, 4672, 4688, 4720, 4728, 4740, 7045))`,
+    BRUTE_FORCE: `search index=${index} (EventCode=4625 OR EventID=4625)`,
+    PRIVILEGE_ESCALATION: `search index=${index} (EventCode IN (4672, 4728) OR EventID IN (4672, 4728))`,
+    POWERSHELL: `search index=${index} ((EventCode=4688 OR EventID=4688) AND (NewProcessName="*powershell.exe" OR ProcessName="*powershell.exe" OR CommandLine="*powershell*"))`,
+  };
+};
+
 export const SPLUNK_QUERIES = {
-  RECENT_EVENTS: `search index=* (EventCode IN (4624, 4625, 4672, 4688, 4720, 4728, 4740, 7045) OR EventID IN (4624, 4625, 4672, 4688, 4720, 4728, 4740, 7045))`,
-  BRUTE_FORCE: `search index=* (EventCode=4625 OR EventID=4625)`,
-  PRIVILEGE_ESCALATION: `search index=* (EventCode IN (4672, 4728) OR EventID IN (4672, 4728))`,
-  POWERSHELL: `search index=* ((EventCode=4688 OR EventID=4688) AND (NewProcessName="*powershell.exe" OR ProcessName="*powershell.exe" OR CommandLine="*powershell*"))`,
+  get RECENT_EVENTS() { return getSplunkQueries().RECENT_EVENTS; },
+  get BRUTE_FORCE() { return getSplunkQueries().BRUTE_FORCE; },
+  get PRIVILEGE_ESCALATION() { return getSplunkQueries().PRIVILEGE_ESCALATION; },
+  get POWERSHELL() { return getSplunkQueries().POWERSHELL; }
 };

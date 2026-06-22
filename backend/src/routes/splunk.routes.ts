@@ -19,5 +19,10 @@ const querySplunkSchema = z.object({
 });
 
 router.get('/events', validate(querySplunkSchema), controller.getEvents);
+router.get('/alerts', controller.getAlerts);
+router.get('/incidents', controller.getIncidents);
+router.get('/risk', controller.getRisk);
+router.get('/dashboard', controller.getDashboard);
+router.get('/threat-hunting', controller.getThreatHunting);
 
 export default router;

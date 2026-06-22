@@ -3,6 +3,16 @@ import { RiskEngineService } from '../services/risk-engine/risk.service';
 import { ApiResponse } from '../types';
 import { query } from '../config/database';
 
+function formatMTTR(seconds: number): string {
+  if (!seconds || seconds <= 0) return '0m';
+  const mins = Math.round(seconds / 60);
+  if (mins < 60) return `${mins}m`;
+  const hours = Math.floor(mins / 60);
+  const remainingMins = mins % 60;
+  if (remainingMins === 0) return `${hours}h`;
+  return `${hours}h ${remainingMins}m`;
+}
+
 export class RiskController {
   private service: RiskEngineService;
 
@@ -33,6 +43,15 @@ export class RiskController {
       } else if (overallRiskScore >= 21) {
         riskLevel = 'MEDIUM';
       }
+
+      // Fetch dynamic MTTR
+      const mttrRes = await query(`
+        SELECT AVG(EXTRACT(EPOCH FROM (COALESCE(closed_at, contained_at, updated_at) - created_at))) as avg_seconds
+        FROM incidents
+        WHERE status IN ('contained', 'closed')
+      `);
+      const avgSeconds = parseFloat(mttrRes.rows[0]?.avg_seconds || '2520'); // fallback default to 42m (2520s)
+      const mttr = formatMTTR(avgSeconds);
 
       // 2. Fetch 30 day daily risk trend
       const trendRes = await query(`
@@ -71,12 +90,13 @@ export class RiskController {
         });
       });
 
-      const response: ApiResponse<{ overallRiskScore: number; riskLevel: string; trend: { day: string; score: number }[] }> = {
+      const response: ApiResponse<{ overallRiskScore: number; riskLevel: string; trend: { day: string; score: number }[]; mttr: string }> = {
         success: true,
         data: {
           overallRiskScore,
           riskLevel,
-          trend: finalTrend
+          trend: finalTrend,
+          mttr
         },
         timestamp: new Date().toISOString(),
         requestId: (req as any).requestId || 'unknown'

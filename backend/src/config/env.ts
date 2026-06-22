@@ -69,6 +69,8 @@ const envSchema = z.object({
   SPLUNK_HEC_TOKEN: z.string().optional(),
   SPLUNK_HOST: z.string().default('localhost'),
   SPLUNK_PORT: z.coerce.number().int().default(8089),
+  SPLUNK_URL: z.string().url().default('https://localhost:8089'),
+  SPLUNK_INDEX: z.string().default('soc'),
   SPLUNK_USERNAME: z.string().default('admin'),
   SPLUNK_PASSWORD: z.string().default('changeme'),
   SPLUNK_TOKEN: z.string().optional(),

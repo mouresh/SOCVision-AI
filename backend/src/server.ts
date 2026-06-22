@@ -37,9 +37,45 @@ async function bootstrap(): Promise<void> {
     `✅  SOCVision API listening on http://${env.HOST}:${env.PORT}`,
   );
 
+  // 5. Start periodic Splunk ingestion background job
+  let isSyncing = false;
+  const syncIntervalMs = 60000; // sync every 60s
+  
+  const splunkSyncJob = async () => {
+    if (isSyncing) return;
+    isSyncing = true;
+    try {
+      const { SplunkService } = await import('./services/splunk/splunk.service');
+      const splunkService = new SplunkService();
+      
+      logger.info('background-sync: checking for new Splunk events');
+      const events = await splunkService.getRecentEvents(50);
+      if (events && events.length > 0) {
+        await splunkService.ingestEventsAsAlerts(events);
+      }
+      
+      // Also run pruning of alerts older than 30 days
+      const prunedCount = await splunkService.pruneOldAlerts(30);
+      if (prunedCount > 0) {
+        logger.info({ prunedCount }, 'background-sync: pruned old alerts');
+      }
+    } catch (err: any) {
+      logger.error({ err: err.message }, 'background-sync: failed to run Splunk ingestion job');
+    } finally {
+      isSyncing = false;
+    }
+  };
+
+  // Run on startup
+  splunkSyncJob();
+  const syncTimer = setInterval(splunkSyncJob, syncIntervalMs);
+
   // ── Graceful shutdown ────────────────────────────────────────────────────
   const shutdown = async (signal: string): Promise<void> => {
     logger.info({ signal }, 'shutdown: signal received — draining connections…');
+    
+    // Clear ingestion timer
+    clearInterval(syncTimer);
 
     // Stop accepting new connections
     server.close(async (err) => {

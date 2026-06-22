@@ -14,7 +14,7 @@ export class SplunkService {
   constructor() {
     this.alertService = new AlertService();
     
-    const baseURL = `https://${env.SPLUNK_HOST}:${env.SPLUNK_PORT}`;
+    const baseURL = env.SPLUNK_URL || `https://${env.SPLUNK_HOST}:${env.SPLUNK_PORT}`;
     const authHeader = env.SPLUNK_TOKEN 
       ? `Bearer ${env.SPLUNK_TOKEN}`
       : `Basic ${Buffer.from(`${env.SPLUNK_USERNAME}:${env.SPLUNK_PASSWORD}`).toString('base64')}`;
@@ -258,5 +258,34 @@ export class SplunkService {
     }
 
     return filtered.slice(offset, offset + limit);
+  }
+
+  async getAlertVolume(earliest = '-24h'): Promise<any[]> {
+    const q = `search index=${env.SPLUNK_INDEX || 'soc'} | bucket _time span=1h | stats count by _time | sort _time`;
+    const res = await this.searchEvents(q, { earliestTime: earliest, limit: 1000 });
+    return res.results.map((row: any) => ({
+      hour: row.fields?._time || row.time,
+      count: parseInt(row.fields?.count || '0', 10)
+    }));
+  }
+
+  async getTopAttackingIps(limit = 10): Promise<any[]> {
+    const q = `search index=${env.SPLUNK_INDEX || 'soc'} src_ip=* | stats count by src_ip | sort -count`;
+    const res = await this.searchEvents(q, { limit });
+    return res.results.map((row: any) => ({
+      ip: row.fields?.src_ip || row.srcIp || 'unknown',
+      count: parseInt(row.fields?.count || '0', 10)
+    }));
+  }
+
+  async pruneOldAlerts(days = 30): Promise<number> {
+    logger.info({ days }, 'splunk: pruning old alerts from database');
+    const deleteSql = `
+      DELETE FROM alerts
+      WHERE fired_at < now() - interval '${days} days'
+    `;
+    const { query } = await import('../../config/database');
+    const res = await query(deleteSql);
+    return res.rowCount || 0;
   }
 }

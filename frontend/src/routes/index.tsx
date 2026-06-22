@@ -316,13 +316,27 @@ function Dashboard() {
             />
           )}
 
-          <Stat
-            label="MTTR"
-            value="42m"
-            delta="-8m this week"
-            accent="success"
-            icon={<Activity className="h-4 w-4 text-success" />}
-          />
+          {riskQuery.isLoading ? (
+            <StatSkeleton />
+          ) : riskQuery.isError ? (
+            <Card className="p-4 flex flex-col justify-between border-destructive/20 bg-destructive/5">
+              <span className="text-xs text-destructive">MTTR failed</span>
+              <button
+                onClick={() => riskQuery.refetch()}
+                className="text-[10px] text-left underline font-semibold mt-1"
+              >
+                Retry
+              </button>
+            </Card>
+          ) : (
+            <Stat
+              label="MTTR"
+              value={riskQuery.data?.mttr || '42m'}
+              delta="dynamic from DB"
+              accent="success"
+              icon={<Activity className="h-4 w-4 text-success" />}
+            />
+          )}
 
           {riskQuery.isLoading ? (
             <StatSkeleton />

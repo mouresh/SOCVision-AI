@@ -10,6 +10,7 @@ export interface RiskOverview {
   overallRiskScore: number;
   riskLevel: string;
   trend: RiskTrendItem[];
+  mttr?: string;
 }
 
 export interface AlertRiskFactors {

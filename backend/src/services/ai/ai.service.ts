@@ -16,11 +16,11 @@ import axios from 'axios';
 export const DETERMINISTIC_MITRE_MAPPINGS: Record<string, MitreMapping> = {
   '4624': { attackType: 'Logon', techniqueId: 'T1078', techniqueName: 'Valid Accounts' },
   '4625': { attackType: 'Brute Force', techniqueId: 'T1110', techniqueName: 'Brute Force' },
-  '4672': { attackType: 'Privilege Escalation', techniqueId: 'T1078', techniqueName: 'Valid Accounts' },
-  '4688': { attackType: 'Process Creation', techniqueId: 'T1059', techniqueName: 'Command and Scripting Interpreter' },
+  '4672': { attackType: 'Privilege Escalation', techniqueId: 'T1078', techniqueName: 'Privilege Escalation' },
+  '4688': { attackType: 'Process Creation', techniqueId: 'T1059', techniqueName: 'Execution' },
   '4720': { attackType: 'Account Creation', techniqueId: 'T1136.001', techniqueName: 'Create Account: Local Account' },
   '4728': { attackType: 'Account Manipulation', techniqueId: 'T1098', techniqueName: 'Account Manipulation' },
-  '4740': { attackType: 'Account Lockout', techniqueId: 'T1531', techniqueName: 'Account Access Removal' },
+  '4740': { attackType: 'Account Discovery', techniqueId: 'T1087', techniqueName: 'Account Discovery' },
   '7045': { attackType: 'Service Creation', techniqueId: 'T1543.003', techniqueName: 'Create or Modify System Process: Windows Service' }
 };
 
