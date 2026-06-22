@@ -39,6 +39,8 @@ const BASE_URL =
   import.meta.env.VITE_API_URL ||
   "https://socvision-api.onrender.com/api/v1";
 
+console.log("Initializing API Client with BASE_URL:", BASE_URL);
+
 async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { timeout = 10000, ...fetchOptions } = options;
   const url = `${BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;

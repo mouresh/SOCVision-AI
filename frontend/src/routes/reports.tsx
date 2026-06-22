@@ -20,6 +20,7 @@ import { useAlerts } from "@/hooks/useAlerts";
 import { useIncidents } from "@/hooks/useIncidents";
 import { useRiskOverview } from "@/hooks/useRisk";
 import { useSplunkEvents } from "@/hooks/useSplunkEvents";
+import { useMounted } from "@/hooks/useMounted";
 
 export const Route = createFileRoute("/reports")({
   head: () => ({ meta: [{ title: "Reports — SOCVision AI" }] }),
@@ -108,6 +109,7 @@ const exportCsv = (data: any[], filename: string) => {
 };
 
 function ReportsPage() {
+  const mounted = useMounted();
   // Query live metrics
   const {
     data: alerts = [],
@@ -267,7 +269,7 @@ function ReportsPage() {
             <Card className="lg:col-span-2">
               <CardHeader title="Risk score trend" subtitle="Composite organizational risk · 30d" />
               <div className="h-72 p-4">
-                {riskData?.trend && riskData.trend.length > 0 ? (
+                {mounted && riskData?.trend && riskData.trend.length > 0 ? (
                   <ResponsiveContainer>
                     <LineChart data={riskData.trend}>
                       <defs>
@@ -294,6 +296,10 @@ function ReportsPage() {
                       />
                     </LineChart>
                   </ResponsiveContainer>
+                ) : !mounted ? (
+                  <div className="h-full w-full bg-white/5 animate-pulse rounded flex items-center justify-center text-xs text-muted-foreground">
+                    Loading trend...
+                  </div>
                 ) : (
                   <div className="h-full flex items-center justify-center text-muted-foreground italic text-xs">
                     No risk trend data observed.
@@ -306,7 +312,7 @@ function ReportsPage() {
             <Card>
               <CardHeader title="Alert distribution" subtitle="By severity" />
               <div className="h-72 p-4">
-                {severityDist.length > 0 ? (
+                {mounted && severityDist.length > 0 ? (
                   <ResponsiveContainer>
                     <PieChart>
                       <Pie
@@ -325,6 +331,10 @@ function ReportsPage() {
                       <Legend wrapperStyle={{ fontSize: 11 }} />
                     </PieChart>
                   </ResponsiveContainer>
+                ) : !mounted ? (
+                  <div className="h-full w-full bg-white/5 animate-pulse rounded flex items-center justify-center text-xs text-muted-foreground">
+                    Loading distribution...
+                  </div>
                 ) : (
                   <div className="h-full flex items-center justify-center text-muted-foreground italic text-xs">
                     No alerts in SIEM to analyze distribution.

@@ -29,11 +29,26 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error }: { error: Error }) {
+  console.error("Global Error Boundary caught error:", error);
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold">Something went wrong</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+    <div className="flex min-h-screen w-full">
+      <Sidebar />
+      <div className="flex-1 min-w-0 flex flex-col p-6 items-center justify-center">
+        <div className="max-w-md text-center border border-destructive/20 bg-destructive/5 rounded-lg p-6">
+          <h1 className="text-lg font-semibold text-destructive flex items-center justify-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-destructive animate-pulse" />
+            System Error Boundary
+          </h1>
+          <p className="mt-4 text-xs text-muted-foreground font-mono text-left bg-black/40 p-4 rounded overflow-auto max-h-48 whitespace-pre-wrap">
+            {error.stack || error.message}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-6 inline-flex rounded-md bg-destructive px-4 py-2 text-xs font-medium text-destructive-foreground hover:bg-destructive/80 transition-colors"
+          >
+            Reload Page
+          </button>
+        </div>
       </div>
     </div>
   );

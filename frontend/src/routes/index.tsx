@@ -23,6 +23,7 @@ import { useAlerts, useAlertStats } from "@/hooks/useAlerts";
 import { useRiskOverview } from "@/hooks/useRisk";
 import { useIncidents } from "@/hooks/useIncidents";
 import { useSplunkEvents } from "@/hooks/useSplunkEvents";
+import { useMounted } from "@/hooks/useMounted";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [{ title: "Dashboard — SOCVision AI" }] }),
@@ -102,6 +103,7 @@ function ErrorBlock({ message, onRetry }: { message: string; onRetry: () => void
 }
 
 function Dashboard() {
+  const mounted = useMounted();
   // Hooks
   const alertsQuery = useAlerts({ limit: 100 });
   const statsQuery = useAlertStats();
@@ -382,50 +384,56 @@ function Dashboard() {
                 }
               />
               <div className="h-72 p-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={alertTrendData}>
-                    <defs>
-                      {["critical", "high", "medium", "low"].map((k) => (
-                        <linearGradient key={k} id={`g-${k}`} x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor={`var(--${k})`} stopOpacity={0.6} />
-                          <stop offset="100%" stopColor={`var(--${k})`} stopOpacity={0} />
-                        </linearGradient>
-                      ))}
-                    </defs>
-                    <CartesianGrid stroke="oklch(0.3 0.03 250 / 0.3)" vertical={false} />
-                    <XAxis dataKey="hour" stroke="oklch(0.7 0.03 240)" fontSize={11} interval={3} />
-                    <YAxis stroke="oklch(0.7 0.03 240)" fontSize={11} />
-                    <Tooltip contentStyle={tooltipStyle} />
-                    <Area
-                      type="monotone"
-                      dataKey="low"
-                      stackId="1"
-                      stroke="var(--low)"
-                      fill="url(#g-low)"
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="medium"
-                      stackId="1"
-                      stroke="var(--medium)"
-                      fill="url(#g-medium)"
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="high"
-                      stackId="1"
-                      stroke="var(--high)"
-                      fill="url(#g-high)"
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="critical"
-                      stackId="1"
-                      stroke="var(--critical)"
-                      fill="url(#g-critical)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+                {mounted ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={alertTrendData}>
+                      <defs>
+                        {["critical", "high", "medium", "low"].map((k) => (
+                          <linearGradient key={k} id={`g-${k}`} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor={`var(--${k})`} stopOpacity={0.6} />
+                            <stop offset="100%" stopColor={`var(--${k})`} stopOpacity={0} />
+                          </linearGradient>
+                        ))}
+                      </defs>
+                      <CartesianGrid stroke="oklch(0.3 0.03 250 / 0.3)" vertical={false} />
+                      <XAxis dataKey="hour" stroke="oklch(0.7 0.03 240)" fontSize={11} interval={3} />
+                      <YAxis stroke="oklch(0.7 0.03 240)" fontSize={11} />
+                      <Tooltip contentStyle={tooltipStyle} />
+                      <Area
+                        type="monotone"
+                        dataKey="low"
+                        stackId="1"
+                        stroke="var(--low)"
+                        fill="url(#g-low)"
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="medium"
+                        stackId="1"
+                        stroke="var(--medium)"
+                        fill="url(#g-medium)"
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="high"
+                        stackId="1"
+                        stroke="var(--high)"
+                        fill="url(#g-high)"
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="critical"
+                        stackId="1"
+                        stroke="var(--critical)"
+                        fill="url(#g-critical)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-full w-full bg-white/5 animate-pulse rounded flex items-center justify-center text-xs text-muted-foreground">
+                    Loading charts...
+                  </div>
+                )}
               </div>
             </Card>
           )}
@@ -444,40 +452,52 @@ function Dashboard() {
               <CardHeader title="Organization risk score" subtitle="Composite — 30 day trend" />
               <div className="p-4 flex flex-col items-center">
                 <div className="h-44 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadialBarChart
-                      innerRadius="70%"
-                      outerRadius="100%"
-                      data={[{ name: "risk", value: riskScore, fill: "var(--high)" }]}
-                      startAngle={210}
-                      endAngle={-30}
-                    >
-                      <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
-                      <RadialBar
-                        background={{ fill: "oklch(0.28 0.03 255)" }}
-                        dataKey="value"
-                        cornerRadius={8}
-                      />
-                    </RadialBarChart>
-                  </ResponsiveContainer>
-                  <div className="-mt-28 text-center">
-                    <div className="text-4xl font-bold text-glow">{riskScore}</div>
-                    <div className="text-xs text-high uppercase tracking-wider">{riskLevel}</div>
-                  </div>
+                  {mounted ? (
+                    <>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <RadialBarChart
+                          innerRadius="70%"
+                          outerRadius="100%"
+                          data={[{ name: "risk", value: riskScore, fill: "var(--high)" }]}
+                          startAngle={210}
+                          endAngle={-30}
+                        >
+                          <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
+                          <RadialBar
+                            background={{ fill: "oklch(0.28 0.03 255)" }}
+                            dataKey="value"
+                            cornerRadius={8}
+                          />
+                        </RadialBarChart>
+                      </ResponsiveContainer>
+                      <div className="-mt-28 text-center">
+                        <div className="text-4xl font-bold text-glow">{riskScore}</div>
+                        <div className="text-xs text-high uppercase tracking-wider">{riskLevel}</div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="h-full w-full bg-white/5 animate-pulse rounded flex items-center justify-center text-xs text-muted-foreground">
+                      Loading gauge...
+                    </div>
+                  )}
                 </div>
                 <div className="h-20 w-full mt-4">
-                  <ResponsiveContainer>
-                    <LineChart data={riskQuery.data?.trend || []}>
-                      <Line
-                        type="monotone"
-                        dataKey="score"
-                        stroke="var(--primary)"
-                        strokeWidth={2}
-                        dot={false}
-                      />
-                      <Tooltip contentStyle={tooltipStyle} />
-                    </LineChart>
-                  </ResponsiveContainer>
+                  {mounted ? (
+                    <ResponsiveContainer>
+                      <LineChart data={riskQuery.data?.trend || []}>
+                        <Line
+                          type="monotone"
+                          dataKey="score"
+                          stroke="var(--primary)"
+                          strokeWidth={2}
+                          dot={false}
+                        />
+                        <Tooltip contentStyle={tooltipStyle} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="h-full w-full bg-white/5 animate-pulse rounded" />
+                  )}
                 </div>
               </div>
             </Card>
