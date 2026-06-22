@@ -1,0 +1,63 @@
+{
+  "name": "SOCVision AI - AI Incident Summary",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "c1a9c3dd-1234-4b5c-a5b6-78d913ee8bfc",
+      "name": "On Incident Escalated",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "webhookId": "incident-sum-webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8080/api/v1/n8n/webhook",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"action\": \"incident_summary\",\n  \"payload\": {\n    \"incidentId\": \"{{ $json.id }}\"\n  }\n}"
+      },
+      "id": "e3a8d4cc-1234-4b5c-a5b6-78d913ee8bfd",
+      "name": "Request AI Summary from Webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "channel": "soc-channel",
+        "text": "📢 *AI Analysis Report for Incident #{{ $json.data.incidentNumber }}*\n*Title:* {{ $json.data.title }}\n*Severity:* {{ $json.data.severity }}\n\n*Summary:*\n{{ $json.data.aiSummary }}"
+      },
+      "id": "1d9cc3dd-1234-4b5c-a5b6-78d913ee8bfe",
+      "name": "Post Summary to Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [550, 300]
+    }
+  ],
+  "connections": {
+    "On Incident Escalated": {
+      "main": [
+        [
+          {
+            "node": "Request AI Summary from Webhook",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request AI Summary from Webhook": {
+      "main": [
+        [
+          {
+            "node": "Post Summary to Slack",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {}
+}

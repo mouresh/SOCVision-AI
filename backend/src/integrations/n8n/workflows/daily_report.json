@@ -1,0 +1,67 @@
+{
+  "name": "SOCVision AI - Daily Executive Report",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerAtHour": 7,
+        "triggerAtMinute": 0
+      },
+      "id": "f8a9a4b2-0112-4cfa-8dfa-ac42b6ff8d7e",
+      "name": "Every Morning at 7 AM",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8080/api/v1/n8n/webhook",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"action\": \"daily_report\"\n}"
+      },
+      "id": "e2a9b3cc-1234-4b5c-a5b6-78d913ee8bfa",
+      "name": "Get Daily Metrics from Webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "socvision-reports@internal.company",
+        "toEmail": "ciso@company.com",
+        "subject": "📊 SOCVision Daily Executive Security Report - {{ $json.data.generatedAt }}",
+        "html": "<h3>Daily Executive Security Summary</h3><p>Here are the compiled statistics for the last 24 hours:</p><ul><li><strong>Total Alerts Processed:</strong> {{ $json.data.totalAlerts }}</li><li><strong>Critical Alerts Flagged:</strong> {{ $json.data.criticalAlerts }}</li><li><strong>Active Open Incidents:</strong> {{ $json.data.openIncidents }}</li></ul><h4>MITRE ATT&CK Techniques Distribution:</h4><pre>{{ JSON.stringify($json.data.mitreDistribution, null, 2) }}</pre>"
+      },
+      "id": "ab9cc2cd-1234-4b5c-a5b6-78d913ee8bfb",
+      "name": "Send Report Email",
+      "type": "n8n-nodes-base.email",
+      "typeVersion": 1,
+      "position": [550, 300]
+    }
+  ],
+  "connections": {
+    "Every Morning at 7 AM": {
+      "main": [
+        [
+          {
+            "node": "Get Daily Metrics from Webhook",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Daily Metrics from Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send Report Email",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {}
+}

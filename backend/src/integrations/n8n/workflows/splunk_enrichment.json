@@ -1,0 +1,63 @@
+{
+  "name": "SOCVision AI - Splunk Alert Enrichment",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "d1a9c3dd-1234-4b5c-a5b6-78d913ee8bfa",
+      "name": "On Splunk Event Received",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "webhookId": "splunk-enrich-webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8080/api/v1/n8n/webhook",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"action\": \"splunk_enrichment\",\n  \"payload\": {\n    \"splunkEvent\": {\n      \"EventCode\": \"{{ $json.EventCode }}\",\n      \"host\": \"{{ $json.host }}\",\n      \"TargetUserName\": \"{{ $json.TargetUserName }}\",\n      \"IpAddress\": \"{{ $json.IpAddress }}\"\n    }\n  }\n}"
+      },
+      "id": "e2a8d3cc-1234-4b5c-a5b6-78d913ee8bfb",
+      "name": "Request Enrichment from Webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [320, 300]
+    },
+    {
+      "parameters": {
+        "channel": "soc-enrichment-channel",
+        "text": "🛡️ *Splunk Event Enriched*\n*Event Code:* {{ $json.data.mitre[0].techniqueId }} ({{ $json.data.mitre[0].techniqueName }})\n*Calculated Risk Score:* {{ $json.data.riskScore }} ({{ $json.data.riskLevel }})\n\n*Security Recommendations:*\n{{ $json.data.recommendations.join('\\n') }}"
+      },
+      "id": "1d8cc2dd-1234-4b5c-a5b6-78d913ee8bfc",
+      "name": "Publish Enriched Alert Details",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [550, 300]
+    }
+  ],
+  "connections": {
+    "On Splunk Event Received": {
+      "main": [
+        [
+          {
+            "node": "Request Enrichment from Webhook",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request Enrichment from Webhook": {
+      "main": [
+        [
+          {
+            "node": "Publish Enriched Alert Details",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {}
+}

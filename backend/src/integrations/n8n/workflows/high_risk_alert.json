@@ -1,0 +1,93 @@
+{
+  "name": "SOCVision AI - High Risk Alert Notification Escalation",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e2e9c1db-0435-4cb3-8ebf-4f3640c6c06a",
+      "name": "On Alert Created",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "webhookId": "alert-esc-webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.risk_score }}",
+              "operation": "largerEqual",
+              "value2": 80
+            }
+          ]
+        }
+      },
+      "id": "1611a3d6-44c1-4b1f-9da3-cfc8137351bf",
+      "name": "If Score >= 80",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:8080/api/v1/n8n/webhook",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"action\": \"high_risk_alert\",\n  \"payload\": {\n    \"alertId\": \"{{ $json.id }}\"\n  }\n}"
+      },
+      "id": "848ac3d8-55a2-4a0b-80df-2cd813cc8d1a",
+      "name": "Call Backend Webhook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [520, 200]
+    },
+    {
+      "parameters": {
+        "fromEmail": "socvision-alerts@internal.company",
+        "toEmail": "soc-manager@company.com",
+        "subject": "🚨 HIGH RISK ALERT ESCALATED - Score: {{ $json.risk_score }}",
+        "html": "<h3>n8n Automated Escalation Alert</h3><p>An alert has been escalated to an incident.</p><p><strong>Alert Title:</strong> {{ $json.title }}</p><p><strong>Risk Score:</strong> {{ $json.risk_score }} ({{ $json.risk_level }})</p><p><strong>Escalated Incident ID:</strong> {{ $json.data.incidentId }}</p>"
+      },
+      "id": "cd9cc1cc-1234-4b5c-a5b6-78d913ee8bfa",
+      "name": "Send Alert Email",
+      "type": "n8n-nodes-base.email",
+      "typeVersion": 1,
+      "position": [750, 200]
+    }
+  ],
+  "connections": {
+    "On Alert Created": {
+      "main": [
+        [
+          {
+            "node": "If Score >= 80",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Score >= 80": {
+      "main": [
+        [
+          {
+            "node": "Call Backend Webhook",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Backend Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send Alert Email",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {}
+}

@@ -1,0 +1,32 @@
+# Dependency directories
+node_modules/
+
+# Local workspace metadata
+.workspace/
+.lovable/
+frontend/.workspace/
+frontend/.lovable/
+
+# Build outputs
+dist/
+dist-ssr/
+.output/
+.vinxi/
+.tanstack/
+.nitro/
+
+# Environment files containing secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Editor/System files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

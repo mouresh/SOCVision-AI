@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: socvision-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: socvision_db
+      POSTGRES_USER: socvision
+      POSTGRES_PASSWORD: socvision_secure_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - socvision-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend/Dockerfile
+    container_name: socvision-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=socvision
+      - DB_PASSWORD=socvision_secure_pass
+      - DB_NAME=socvision_db
+    depends_on:
+      - postgres
+    networks:
+      - socvision-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend/Dockerfile
+    container_name: socvision-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - socvision-network
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: socvision-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=n8npassword
+      - N8N_ENCRYPTION_KEY=n8n-encryption-key-change-me
+    volumes:
+      - n8n_data:/home/node/.n8n
+    networks:
+      - socvision-network
+
+volumes:
+  postgres_data:
+  n8n_data:
+
+networks:
+  socvision-network:
+    driver: bridge
