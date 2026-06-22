@@ -42,7 +42,7 @@ const BASE_URL =
 console.log("Initializing API Client with BASE_URL:", BASE_URL);
 
 async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
-  const { timeout = 10000, ...fetchOptions } = options;
+  const { timeout = 60000, ...fetchOptions } = options;
   const url = `${BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
 
   const controller = new AbortController();

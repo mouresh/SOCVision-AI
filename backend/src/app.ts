@@ -64,7 +64,9 @@ export function createApp(): Application {
         // Allow requests with no origin (curl, Postman, server-to-server)
         if (!origin) return callback(null, true);
 
-        if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+        const isVercel = origin.endsWith('.vercel.app') || origin === 'https://vercel.app';
+
+        if (allowedOrigins.includes('*') || allowedOrigins.includes(origin) || isVercel) {
           callback(null, true);
         } else {
           logger.warn({ origin }, 'cors: rejected request from disallowed origin');
