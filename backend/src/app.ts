@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from 'express';
+﻿import express, { Application, Request, Response } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -16,6 +16,7 @@ import riskRouter from './routes/risk.routes';
 import incidentsRouter from './modules/incidents/incident.routes';
 import aiRouter from './routes/ai.routes';
 import n8nRouter from './integrations/n8n/n8n.webhook';
+import reportsRouter from './routes/reports.routes';
 
 // ---------------------------------------------------------------------------
 // Application factory
@@ -24,12 +25,12 @@ import n8nRouter from './integrations/n8n/n8n.webhook';
 export function createApp(): Application {
   const app = express();
 
-  // ── Trust proxy (required when behind nginx / ALB / Cloudflare) ───────────
+  // â”€â”€ Trust proxy (required when behind nginx / ALB / Cloudflare) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (isProd) {
     app.set('trust proxy', 1);
   }
 
-  // ── Security headers ──────────────────────────────────────────────────────
+  // â”€â”€ Security headers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   app.use(
     helmet({
       // Allow the SOC dashboard to embed API responses in same-origin iframes
@@ -55,7 +56,7 @@ export function createApp(): Application {
     }),
   );
 
-  // ── CORS ──────────────────────────────────────────────────────────────────
+  // â”€â”€ CORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const allowedOrigins = env.CORS_ORIGIN.split(',').map((o) => o.trim());
 
   app.use(
@@ -82,17 +83,17 @@ export function createApp(): Application {
     }),
   );
 
-  // ── Request ID (before Morgan so it can be logged) ────────────────────────
+  // â”€â”€ Request ID (before Morgan so it can be logged) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   app.use(requestIdMiddleware);
 
-  // ── HTTP request logging ──────────────────────────────────────────────────
+  // â”€â”€ HTTP request logging â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const morganFormat = isDev
     ? ':method :url :status :res[content-length] - :response-time ms'
     : ':remote-addr - :method :url :status :res[content-length] :response-time ms :req[x-request-id]';
 
   app.use(morgan(morganFormat, { stream: morganStream, skip: (req) => req.path === '/health' }));
 
-  // ── Response compression ─────────────────────────────────────────────────
+  // â”€â”€ Response compression â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   app.use(
     compression({
       filter: (req, res) => {
@@ -103,27 +104,27 @@ export function createApp(): Application {
     }),
   );
 
-  // ── Body parsers ──────────────────────────────────────────────────────────
+  // â”€â”€ Body parsers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-  // ── Global rate limiter ───────────────────────────────────────────────────
+  // â”€â”€ Global rate limiter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   app.use(generalRateLimiter);
 
   // =========================================================================
   // Routes
   // =========================================================================
 
-  // Health / readiness / metrics probes — no API prefix, no auth
+  // Health / readiness / metrics probes â€” no API prefix, no auth
   app.use('/', healthRouter);
 
   // Versioned API base path
   const apiBase = `${env.API_PREFIX}/${env.API_VERSION}`;
 
-  // ── Auth endpoints (strict rate limiter applied per-router) ───────────────
+  // â”€â”€ Auth endpoints (strict rate limiter applied per-router) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // app.use(`${apiBase}/auth`, authRateLimiter, authRouter);
 
-  // ── Placeholder for future feature routers ───────────────────────────────
+  // â”€â”€ Placeholder for future feature routers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   app.use(`${apiBase}/alerts`,    alertsRouter);
   app.use(`${apiBase}/splunk`,    splunkRouter);
   app.use(`${apiBase}/risk`,      riskRouter);
@@ -134,10 +135,10 @@ export function createApp(): Application {
   // app.use(`${apiBase}/assets`,    assetsRouter);
   // app.use(`${apiBase}/agents`,    agentsRouter);
   // app.use(`${apiBase}/users`,     usersRouter);
-  // app.use(`${apiBase}/reports`,   reportsRouter);
+  app.use(`${apiBase}/reports`,   reportsRouter);
   // app.use(`${apiBase}/threat-intel`, threatIntelRouter);
 
-  // ── API root — returns available endpoints ────────────────────────────────
+  // â”€â”€ API root â€” returns available endpoints â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   app.get(apiBase, (_req: Request, res: Response) => {
     res.json({
       service:    'SOCVision AI API',
@@ -172,3 +173,5 @@ export function createApp(): Application {
 
   return app;
 }
+
+

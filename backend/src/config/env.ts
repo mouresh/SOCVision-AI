@@ -1,4 +1,4 @@
-import { z } from 'zod';
+﻿import { z } from 'zod';
 import path from 'path';
 import dotenv from 'dotenv';
 
@@ -9,18 +9,18 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 // Schema
 // ---------------------------------------------------------------------------
 const envSchema = z.object({
-  // ── Runtime ───────────────────────────────────────────────────────────────
+  // â”€â”€ Runtime â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   NODE_ENV: z
     .enum(['development', 'test', 'production'])
     .default('development'),
   PORT: z.coerce.number().int().min(1).max(65535).default(8080),
   HOST: z.string().default('0.0.0.0'),
 
-  // ── API ───────────────────────────────────────────────────────────────────
+  // â”€â”€ API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   API_VERSION: z.string().default('v1'),
   API_PREFIX: z.string().default('/api'),
 
-  // ── PostgreSQL ────────────────────────────────────────────────────────────
+  // â”€â”€ PostgreSQL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   DB_HOST: z.string().min(1, 'DB_HOST is required'),
   DB_PORT: z.coerce.number().int().min(1).max(65535).default(5432),
   DB_NAME: z.string().min(1, 'DB_NAME is required'),
@@ -33,7 +33,7 @@ const envSchema = z.object({
   DB_POOL_CONNECTION_TIMEOUT_MS: z.coerce.number().int().default(5_000),
   DB_STATEMENT_TIMEOUT_MS: z.coerce.number().int().default(30_000),
 
-  // ── Security ──────────────────────────────────────────────────────────────
+  // â”€â”€ Security â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   JWT_EXPIRES_IN: z.string().default('15m'),
   JWT_REFRESH_SECRET: z
@@ -42,29 +42,29 @@ const envSchema = z.object({
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
   BCRYPT_ROUNDS: z.coerce.number().int().min(10).max(14).default(12),
 
-  // ── CORS ──────────────────────────────────────────────────────────────────
+  // â”€â”€ CORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
   CORS_CREDENTIALS: z
     .enum(['true', 'false'])
     .default('true')
     .transform((v) => v === 'true'),
 
-  // ── Rate Limiting ─────────────────────────────────────────────────────────
+  // â”€â”€ Rate Limiting â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   RATE_LIMIT_WINDOW_MS: z.coerce.number().int().default(15 * 60 * 1000), // 15 min
   RATE_LIMIT_MAX_REQUESTS: z.coerce.number().int().default(500),
   RATE_LIMIT_AUTH_MAX: z.coerce.number().int().default(10),   // stricter for /auth
 
-  // ── Logging ───────────────────────────────────────────────────────────────
+  // â”€â”€ Logging â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   LOG_LEVEL: z
     .enum(['error', 'warn', 'info', 'http', 'verbose', 'debug', 'silly'])
     .default('info'),
   LOG_FORMAT: z.enum(['json', 'pretty']).default('json'),
   LOG_DIR: z.string().default('logs'),
 
-  // ── Redis (optional — for session cache) ─────────────────────────────────
+  // â”€â”€ Redis (optional â€” for session cache) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   REDIS_URL: z.string().url().optional(),
 
-  // ── Service integrations ──────────────────────────────────────────────────
+  // â”€â”€ Service integrations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   SPLUNK_HEC_URL: z.string().url().optional(),
   SPLUNK_HEC_TOKEN: z.string().optional(),
   SPLUNK_HOST: z.string().default('localhost'),
@@ -82,7 +82,7 @@ const envSchema = z.object({
   WAZUH_API_USER: z.string().optional(),
   WAZUH_API_PASSWORD: z.string().optional(),
 
-  // ── Feature flags ─────────────────────────────────────────────────────────
+  // â”€â”€ Feature flags â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   ENABLE_SWAGGER: z
     .enum(['true', 'false'])
     .default('true')
@@ -100,11 +100,11 @@ const _parsed = envSchema.safeParse(process.env);
 
 if (!_parsed.success) {
   const issues = _parsed.error.issues
-    .map((i) => `  • ${i.path.join('.')}: ${i.message}`)
+    .map((i) => `  â€¢ ${i.path.join('.')}: ${i.message}`)
     .join('\n');
 
-  // Use console.error here — the logger hasn't initialised yet
-  console.error('\n[SOCVision] ❌  Environment validation failed:\n' + issues + '\n');
+  // Use console.error here â€” the logger hasn't initialised yet
+  console.error('\n[SOCVision] âŒ  Environment validation failed:\n' + issues + '\n');
   process.exit(1);
 }
 
@@ -122,3 +122,4 @@ export const BASE_URL =
   `http${isProd ? 's' : ''}://${env.HOST}:${env.PORT}${env.API_PREFIX}/${env.API_VERSION}`;
 
 export type Env = z.infer<typeof envSchema>;
+

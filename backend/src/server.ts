@@ -1,4 +1,4 @@
-import http from 'http';
+﻿import http from 'http';
 import { createApp } from './app';
 import { env } from './config/env';
 import { logger } from './config/logger';
@@ -10,12 +10,22 @@ import { initDatabase, closeDatabase } from './config/database';
 async function bootstrap(): Promise<void> {
   logger.info(
     { env: env.NODE_ENV, version: process.env.npm_package_version ?? '0.0.0' },
-    '🚀  SOCVision API — starting…',
+    'ðŸš€  SOCVision API â€” startingâ€¦',
   );
 
   // 1. Verify database connectivity before accepting traffic
   await initDatabase();
 
+  
+  // Seed MITRE ATT&CK techniques on startup
+  try {
+    const { MitreService } = await import('./services/mitre/mitre.service');
+    const mitreService = new MitreService();
+    const seeded = await mitreService.seedAllTechniques();
+    logger.info({ seeded }, 'startup: MITRE ATT&CK techniques seeded');
+  } catch (mitreErr: any) {
+    logger.warn({ err: mitreErr.message }, 'startup: MITRE seeding failed (non-fatal)');
+  }
   // 2. Build the Express application
   const app = createApp();
 
@@ -34,12 +44,12 @@ async function bootstrap(): Promise<void> {
 
   logger.info(
     { host: env.HOST, port: env.PORT },
-    `✅  SOCVision API listening on http://${env.HOST}:${env.PORT}`,
+    `âœ…  SOCVision API listening on http://${env.HOST}:${env.PORT}`,
   );
 
   // 5. Start periodic Splunk ingestion background job
   let isSyncing = false;
-  const syncIntervalMs = 60000; // sync every 60s
+  const syncIntervalMs = 30000; // sync every 30s
   
   const splunkSyncJob = async () => {
     if (isSyncing) return;
@@ -70,9 +80,9 @@ async function bootstrap(): Promise<void> {
   splunkSyncJob();
   const syncTimer = setInterval(splunkSyncJob, syncIntervalMs);
 
-  // ── Graceful shutdown ────────────────────────────────────────────────────
+  // â”€â”€ Graceful shutdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const shutdown = async (signal: string): Promise<void> => {
-    logger.info({ signal }, 'shutdown: signal received — draining connections…');
+    logger.info({ signal }, 'shutdown: signal received â€” draining connectionsâ€¦');
     
     // Clear ingestion timer
     clearInterval(syncTimer);
@@ -98,7 +108,7 @@ async function bootstrap(): Promise<void> {
 
     // Force-kill if graceful shutdown takes too long
     setTimeout(() => {
-      logger.error('shutdown: grace period exceeded — forcing exit');
+      logger.error('shutdown: grace period exceeded â€” forcing exit');
       process.exit(1);
     }, 15_000).unref();
   };
@@ -111,6 +121,7 @@ async function bootstrap(): Promise<void> {
 // Run
 // ---------------------------------------------------------------------------
 bootstrap().catch((err) => {
-  logger.error({ err }, '💥  SOCVision API failed to start');
+  logger.error({ err }, 'ðŸ’¥  SOCVision API failed to start');
   process.exit(1);
 });
+
