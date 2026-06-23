@@ -219,6 +219,83 @@ export class SplunkController {
         logger.error({ err: err.message }, 'splunk-controller: dashboard failed to get live alert stream');
       }
 
+      // Add database queries for widgets
+      let mitreDistribution: any[] = [];
+      try {
+        const mitreRes = await query(`
+          SELECT mt.technique_id, mt.name, COUNT(*)::int as count
+          FROM alert_mitre_mapping amm
+          JOIN mitre_techniques mt ON mt.id = amm.technique_id
+          GROUP BY mt.technique_id, mt.name
+          ORDER BY count DESC
+          LIMIT 10
+        `);
+        mitreDistribution = mitreRes.rows.map(r => ({
+          techniqueId: r.technique_id,
+          name: r.name,
+          count: r.count
+        }));
+      } catch (err: any) {
+        logger.error({ err: err.message }, 'splunk-controller: dashboard failed to query MITRE distribution');
+      }
+
+      let recentIncidents: any[] = [];
+      try {
+        const recentIncidentsRes = await query(`
+          SELECT id, title, severity, status, created_at
+          FROM incidents
+          ORDER BY created_at DESC
+          LIMIT 5
+        `);
+        recentIncidents = recentIncidentsRes.rows.map(r => ({
+          id: r.id,
+          title: r.title,
+          severity: r.severity,
+          status: r.status,
+          createdAt: r.created_at
+        }));
+      } catch (err: any) {
+        logger.error({ err: err.message }, 'splunk-controller: dashboard failed to query recent incidents');
+      }
+
+      let topSourceIps: any[] = [];
+      try {
+        const topIpsRes = await query(`
+          SELECT 
+            COALESCE(raw_event->>'srcIp', raw_event->>'src_ip', raw_event->>'IpAddress') as ip,
+            COUNT(*)::int as count
+          FROM alerts
+          WHERE COALESCE(raw_event->>'srcIp', raw_event->>'src_ip', raw_event->>'IpAddress') IS NOT NULL
+            AND COALESCE(raw_event->>'srcIp', raw_event->>'src_ip', raw_event->>'IpAddress') != '-'
+          GROUP BY ip
+          ORDER BY count DESC
+          LIMIT 10
+        `);
+        topSourceIps = topIpsRes.rows.map(r => ({
+          ip: r.ip,
+          count: r.count
+        }));
+      } catch (err: any) {
+        logger.error({ err: err.message }, 'splunk-controller: dashboard failed to query top source IPs');
+      }
+
+      let alertTrends: any[] = [];
+      try {
+        const trendsRes = await query(`
+          SELECT DATE_TRUNC('hour', fired_at) as hour_bucket, COUNT(*)::int as count
+          FROM alerts
+          WHERE fired_at >= now() - interval '24 hours'
+          GROUP BY hour_bucket
+          ORDER BY hour_bucket
+        `);
+        alertTrends = trendsRes.rows.map(r => ({
+          hour: new Date(r.hour_bucket).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          count: r.count
+        }));
+      } catch (err: any) {
+        logger.error({ err: err.message }, 'splunk-controller: dashboard failed to query alert trends');
+      }
+
       const response: ApiResponse<any> = {
         success: true,
         data: {
@@ -229,7 +306,11 @@ export class SplunkController {
           mttr: formatMTTR(avgSeconds),
           alertVolume,
           topAttackingIps,
-          liveAlertStream
+          liveAlertStream,
+          topSourceIps,
+          mitreDistribution,
+          recentIncidents,
+          alertTrends
         },
         timestamp: new Date().toISOString(),
         requestId: (req as any).requestId || 'unknown'

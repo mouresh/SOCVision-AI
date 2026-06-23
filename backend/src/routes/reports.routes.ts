@@ -1,4 +1,4 @@
-﻿import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { ReportService } from '../services/report/report.service';
 import { MitreService } from '../services/mitre/mitre.service';
 import path from 'path';
@@ -28,10 +28,10 @@ router.get('/list', async (_req: Request, res: Response, next: NextFunction) => 
   } catch (error) { next(error); }
 });
 
-// GET /api/v1/reports/download/:filename
-router.get('/download/:filename', async (req: Request, res: Response, next: NextFunction) => {
+// GET /api/v1/reports/download/:file
+router.get('/download/:file', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const safeFileName = path.basename(req.params.filename);
+    const safeFileName = path.basename(req.params.file);
     const filePath = path.join(process.cwd(), 'reports', safeFileName);
     if (!fs.existsSync(filePath)) {
       res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: 'Report not found' } });

@@ -1,4 +1,4 @@
-﻿import http from 'http';
+import http from 'http';
 import { createApp } from './app';
 import { env } from './config/env';
 import { logger } from './config/logger';
@@ -49,7 +49,7 @@ async function bootstrap(): Promise<void> {
 
   // 5. Start periodic Splunk ingestion background job
   let isSyncing = false;
-  const syncIntervalMs = 30000; // sync every 30s
+  const syncIntervalMs = 60000; // sync every 60s
   
   const splunkSyncJob = async () => {
     if (isSyncing) return;

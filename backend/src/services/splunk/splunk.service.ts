@@ -1,4 +1,4 @@
-﻿import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import https from 'https';
 import { env } from '../../config/env';
 import { logger } from '../../config/logger';
@@ -138,61 +138,6 @@ export class SplunkService {
         
         if (isNew) {
           created++;
-          
-          // Auto-assign MITRE technique
-          try {
-            const { MitreService } = await import('../mitre/mitre.service');
-            const mitreService = new MitreService();
-            await mitreService.assignTechnique(alert.id, event.eventCode);
-          } catch (mitreErr: any) {
-            logger.debug({ err: mitreErr.message }, 'splunk: MITRE assignment skipped');
-          }
-
-          // Send email for critical/high events
-          try {
-            const { EmailService } = await import('../email/email.service');
-            const emailService = new EmailService();
-            const emailPayload = {
-              id: alert.id,
-              title: alert.title,
-              severity: alert.severity,
-              source: alert.source,
-              description: alert.description,
-              sourceRuleId: alert.sourceRuleId,
-              host: event.host,
-              srcIp: event.srcIp,
-              firedAt: alert.firedAt,
-              riskScore: alert.riskScore
-            };
-            
-            if (event.eventCode === '4740') {
-              await emailService.sendAccountLockout(emailPayload);
-            } else if (event.eventCode === '4625' && severity === 'high') {
-              await emailService.sendBruteForceAlert(emailPayload);
-            } else if (severity === 'critical') {
-              await emailService.sendCriticalAlert(emailPayload);
-            }
-          } catch (emailErr: any) {
-            logger.debug({ err: emailErr.message }, 'splunk: email notification skipped');
-          }
-
-          // Auto-trigger AI analysis for critical/high alerts
-          if (severity === 'critical' || severity === 'high') {
-            try {
-              const { AiService } = await import('../ai/ai.service');
-              const aiService = new AiService();
-              setImmediate(async () => {
-                try {
-                  await aiService.analyzeAlert(alert.id);
-                  logger.info({ alertId: alert.id }, 'splunk: AI analysis completed for high-severity alert');
-                } catch (aiErr: any) {
-                  logger.debug({ err: aiErr.message, alertId: alert.id }, 'splunk: AI analysis failed');
-                }
-              });
-            } catch (aiErr: any) {
-              logger.debug({ err: aiErr.message }, 'splunk: AI service import failed');
-            }
-          }
         } else {
           skipped++;
         }
@@ -315,10 +260,10 @@ export class SplunkService {
   }
 
   async getTopAttackingIps(limit = 10): Promise<any[]> {
-    const q = `search index=${env.SPLUNK_INDEX || 'soc'} src_ip=* | stats count by src_ip | sort -count`;
+    const q = `search index=${env.SPLUNK_INDEX || 'soc'} (IpAddress=* OR src_ip=*) | eval ip=coalesce(IpAddress,src_ip) | where ip != "-" AND ip != "" | stats count by ip | sort -count`;
     const res = await this.searchEvents(q, { limit });
     return res.results.map((row: any) => ({
-      ip: row.fields?.src_ip || row.srcIp || 'unknown',
+      ip: row.fields?.ip || row.fields?.IpAddress || row.fields?.src_ip || row.srcIp || 'unknown',
       count: parseInt(row.fields?.count || '0', 10)
     }));
   }

@@ -1,4 +1,4 @@
-﻿import PDFDocument from 'pdfkit';
+import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
 import { query } from '../../config/database';
@@ -132,6 +132,100 @@ export class ReportService {
 
       doc.end();
       stream.on('finish', resolve);
+      stream.on('error', reject);
+    });
+  }
+
+  async generateIncidentReport(incidentId: string): Promise<string> {
+    logger.info({ incidentId }, 'report-service: generating incident PDF');
+    
+    // Fetch incident details
+    const incRes = await query('SELECT * FROM incidents WHERE id = $1', [incidentId]);
+    if (incRes.rows.length === 0) throw new Error(`Incident ${incidentId} not found`);
+    const incident = incRes.rows[0];
+
+    // Fetch associated alerts
+    const alertsRes = await query(`
+      SELECT a.* 
+      FROM alerts a
+      JOIN incident_alerts ia ON a.id = ia.alert_id
+      WHERE ia.incident_id = $1
+    `, [incidentId]);
+    const alerts = alertsRes.rows;
+
+    // Fetch AI analysis
+    let aiAnalysis: any = null;
+    if (alerts.length > 0) {
+      const aiRes = await query('SELECT * FROM ai_analysis WHERE alert_id = $1 ORDER BY created_at DESC LIMIT 1', [alerts[0].id]);
+      if (aiRes.rows.length > 0) aiAnalysis = aiRes.rows[0];
+    }
+
+    const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const filePath = path.join(this.reportsDir, `incident-report-${incident.incident_number || 'INC'}-${ts}.pdf`);
+
+    return new Promise((resolve, reject) => {
+      const doc = new PDFDocument({ margin: 50, size: 'A4' });
+      const stream = fs.createWriteStream(filePath);
+      doc.pipe(stream);
+
+      // Header block
+      doc.rect(0, 0, doc.page.width, 85).fill('#ff2d55'); // red header for incident
+      doc.fillColor('#ffffff').fontSize(20).font('Helvetica-Bold').text(`INCIDENT REPORT: #${incident.incident_number || 'INC'}`, 50, 25);
+      doc.fillColor('#ffffff').fontSize(10).font('Helvetica').text(`Title: ${incident.title} | Severity: ${incident.severity.toUpperCase()}`, 50, 55);
+
+      doc.fillColor('#0d1117').moveDown(3);
+
+      const row = (label: string, value: string) => {
+        doc.fillColor('#8b949e').font('Helvetica-Bold').text(label + ': ', 60, undefined, { continued: true });
+        doc.fillColor('#0d1117').font('Helvetica').text(value);
+      };
+
+      // Summary
+      doc.moveDown(1).fillColor('#ff2d55').fontSize(13).font('Helvetica-Bold').text('Incident Details', 50).moveDown(0.3);
+      doc.rect(50, doc.y, doc.page.width - 100, 1).fill('#30363d').moveDown(0.4).font('Helvetica').fontSize(10);
+      row('Status', String(incident.status));
+      row('Severity', String(incident.severity));
+      row('Priority', String(incident.priority));
+      row('Created At', new Date(incident.created_at).toLocaleString());
+      doc.moveDown(0.5);
+      doc.fillColor('#8b949e').font('Helvetica-Bold').text('Description:', 60);
+      doc.fillColor('#0d1117').font('Helvetica').text(incident.description || 'No description provided.', 60);
+
+      // AI Analysis
+      if (aiAnalysis) {
+        doc.moveDown(1.5).fillColor('#005cc5').fontSize(13).font('Helvetica-Bold').text('AI Analyst Assessment', 50).moveDown(0.3);
+        doc.rect(50, doc.y, doc.page.width - 100, 1).fill('#30363d').moveDown(0.4).font('Helvetica').fontSize(10);
+        
+        doc.fillColor('#0d1117').font('Helvetica-Bold').text('Executive Summary:', 60);
+        doc.font('Helvetica').text(aiAnalysis.executive_summary, 60).moveDown(0.5);
+
+        doc.font('Helvetica-Bold').text('Technical Analysis:', 60);
+        doc.font('Helvetica').text(aiAnalysis.technical_analysis, 60).moveDown(0.5);
+
+        doc.font('Helvetica-Bold').text('Recommended Actions:', 60);
+        const actions = Array.isArray(aiAnalysis.recommended_actions) 
+          ? aiAnalysis.recommended_actions 
+          : JSON.parse(aiAnalysis.recommended_actions || '[]');
+        actions.forEach((act: string, idx: number) => {
+          doc.font('Helvetica').text(`${idx + 1}. ${act}`, 70);
+        });
+      }
+
+      // Associated Alerts
+      if (alerts.length > 0) {
+        doc.moveDown(1.5).fillColor('#22863a').fontSize(13).font('Helvetica-Bold').text('Associated Alerts', 50).moveDown(0.3);
+        doc.rect(50, doc.y, doc.page.width - 100, 1).fill('#30363d').moveDown(0.4).font('Helvetica').fontSize(10);
+
+        alerts.forEach((alert, idx) => {
+          doc.fillColor('#0d1117').font('Helvetica-Bold').text(`${idx + 1}. Alert: ${alert.title}`, 60);
+          doc.font('Helvetica').fontSize(9).fillColor('#586069');
+          doc.text(`ID: ${alert.id} | Risk Score: ${alert.risk_score} | Event Code: ${alert.source_rule_id} | Timestamp: ${new Date(alert.fired_at).toLocaleString()}`, 70);
+          doc.moveDown(0.3);
+        });
+      }
+
+      doc.end();
+      stream.on('finish', () => resolve(filePath));
       stream.on('error', reject);
     });
   }

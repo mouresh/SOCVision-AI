@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 /**
  * SOCVision AI - Full Pipeline Verification Script
  * Run: node scripts/verify-pipeline.js

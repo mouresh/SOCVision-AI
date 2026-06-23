@@ -127,6 +127,65 @@ export class AiService {
     }
 
     logger.info({ alertId, analysisId: firstDbRow.id }, 'ai-service: analysis completed and saved');
+
+    // Send email notification for critical/high alerts
+    if (alert.severity === 'critical' || alert.severity === 'high') {
+      try {
+        const { EmailService } = await import('../email/email.service');
+        const emailService = new EmailService();
+
+        // Fetch MITRE mapping if assigned
+        const mitreRes = await query(`
+          SELECT mt.technique_id, mt.name 
+          FROM alert_mitre_mapping amm
+          JOIN mitre_techniques mt ON mt.id = amm.technique_id
+          WHERE amm.alert_id = $1
+          LIMIT 1
+        `, [alert.id]);
+        
+        const mitreTech = mitreRes.rows[0]
+          ? `${mitreRes.rows[0].technique_id} — ${mitreRes.rows[0].name}`
+          : 'N/A';
+
+        const emailPayload = {
+          id: alert.id,
+          title: alert.title,
+          severity: alert.severity,
+          source: alert.source,
+          description: alert.description,
+          sourceRuleId: alert.sourceRuleId,
+          host: (alert.rawEvent.host || alert.rawEvent.ComputerName || 'N/A').toString(),
+          srcIp: (alert.rawEvent.srcIp || alert.rawEvent.IpAddress || 'N/A').toString(),
+          firedAt: alert.firedAt,
+          riskScore: riskScore,
+          mitreTechnique: mitreTech,
+          aiSummary: output.executiveSummary
+        };
+
+        if (alert.sourceRuleId === '4740') {
+          await emailService.sendAccountLockout(emailPayload);
+        } else if (alert.sourceRuleId === '4625' && alert.severity === 'high') {
+          await emailService.sendBruteForceAlert(emailPayload);
+        } else {
+          await emailService.sendCriticalAlert(emailPayload);
+        }
+      } catch (emailErr: any) {
+        logger.error({ err: emailErr.message, alertId: alert.id }, 'ai-service: failed to send email alert');
+      }
+    }
+
+    // If riskScore >= 90 and incident exists, generate incident report PDF
+    if (riskScore && riskScore >= 90 && incident) {
+      try {
+        const { ReportService } = await import('../report/report.service');
+        const reportService = new ReportService();
+        const pdfPath = await reportService.generateIncidentReport(incident.id);
+        logger.info({ incidentId: incident.id, pdfPath }, 'ai-service: generated incident report PDF for risk score >= 90');
+      } catch (pdfErr: any) {
+        logger.error({ err: pdfErr.message, incidentId: incident.id }, 'ai-service: failed to generate incident report PDF');
+      }
+    }
+
     return firstDbRow;
   }
 

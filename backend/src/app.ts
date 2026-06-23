@@ -1,4 +1,4 @@
-﻿import express, { Application, Request, Response } from 'express';
+import express, { Application, Request, Response } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -17,6 +17,7 @@ import incidentsRouter from './modules/incidents/incident.routes';
 import aiRouter from './routes/ai.routes';
 import n8nRouter from './integrations/n8n/n8n.webhook';
 import reportsRouter from './routes/reports.routes';
+import emailRouter from './routes/email.routes';
 
 // ---------------------------------------------------------------------------
 // Application factory
@@ -136,6 +137,7 @@ export function createApp(): Application {
   // app.use(`${apiBase}/agents`,    agentsRouter);
   // app.use(`${apiBase}/users`,     usersRouter);
   app.use(`${apiBase}/reports`,   reportsRouter);
+  app.use(`${apiBase}/email`,     emailRouter);
   // app.use(`${apiBase}/threat-intel`, threatIntelRouter);
 
   // â”€â”€ API root â€” returns available endpoints â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€

@@ -43,9 +43,35 @@ export class AlertService {
     } catch (riskErr: any) {
       logger.error({ err: riskErr.message, alertId: alert.id }, 'service: failed to process alert risk score');
     }
+
+    // Auto-assign MITRE technique
+    try {
+      const { MitreService } = await import('../../services/mitre/mitre.service');
+      const mitreService = new MitreService();
+      if (alert.sourceRuleId) {
+        await mitreService.assignTechnique(alert.id, alert.sourceRuleId);
+      }
+    } catch (mitreErr: any) {
+      logger.error({ err: mitreErr.message, alertId: alert.id }, 'service: failed to assign MITRE technique');
+    }
     
     if (alert.severity === 'critical' || alert.severity === 'high') {
       logger.warn({ alertId: alert.id, severity: alert.severity }, 'service: high-severity alert created, triggering correlation');
+      
+      try {
+        const { AiService } = await import('../../services/ai/ai.service');
+        const aiService = new AiService();
+        setImmediate(async () => {
+          try {
+            await aiService.analyzeAlert(alert.id);
+            logger.info({ alertId: alert.id }, 'service: AI analysis completed for high-severity alert');
+          } catch (aiErr: any) {
+            logger.error({ err: aiErr.message, alertId: alert.id }, 'service: AI analysis failed');
+          }
+        });
+      } catch (aiErr: any) {
+        logger.error({ err: aiErr.message }, 'service: failed to trigger AI analysis');
+      }
     }
     
     return alert;

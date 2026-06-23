@@ -1,0 +1,761 @@
+{
+  "phase1_splunk": {
+    "Total events (last 24h)": "35906",
+    "EventCode 4625 (Failed Logon)": "1",
+    "EventCode 4740 (Account Lockout)": "0",
+    "EventCode 4672 (Special Privileges)": "63",
+    "EventCode 4688 (Process Creation)": "5487",
+    "sample_event": {
+      "_bkt": "soc~1~305F7FD5-D924-4706-AA2C-5FA7F66B0797",
+      "_cd": "1:567293",
+      "_indextime": "1782184598",
+      "_raw": "06/22/2026 20:16:38.037 -0700\ncollection=\"Network Interface\"\nobject=\"Network Interface\"\ncounter=\"Bytes Sent/sec\"\ninstance=\"Intel[R] PRO_1000 MT Desktop Adapter _2\"\nValue=1632.2136303866223",
+      "_serial": "0",
+      "_si": [
+        "Mouresh_Royal",
+        "soc"
+      ],
+      "_sourcetype": "Perfmon:Network Interface",
+      "_time": "2026-06-23T08:46:38.000+05:30",
+      "host": "DESKTOP-UQMISCF",
+      "index": "soc",
+      "linecount": "6",
+      "source": "Perfmon:Network Interface",
+      "sourcetype": "Perfmon:Network Interface",
+      "splunk_server": "Mouresh_Royal"
+    }
+  },
+  "phase2_database": {
+    "alertCount": 899,
+    "incidentCount": 4,
+    "aiCount": 38,
+    "latestAlerts": [
+      {
+        "id": "1f31794c-c18e-4620-a7a7-c6261ad11902",
+        "title": "Splunk: A new process has been created",
+        "severity": "high",
+        "source": "splunk",
+        "source_rule_id": "4688",
+        "fired_at": "2026-06-23T03:15:30.000Z",
+        "risk_score": "70.00"
+      },
+      {
+        "id": "79d6146b-4d15-417e-89ff-e783dcb3635c",
+        "title": "Splunk: A new process has been created",
+        "severity": "high",
+        "source": "splunk",
+        "source_rule_id": "4688",
+        "fired_at": "2026-06-23T03:15:31.000Z",
+        "risk_score": "70.00"
+      },
+      {
+        "id": "3bcc75df-d4aa-43e9-b398-7476476a2ed3",
+        "title": "Splunk: A new process has been created",
+        "severity": "high",
+        "source": "splunk",
+        "source_rule_id": "4688",
+        "fired_at": "2026-06-23T03:15:32.000Z",
+        "risk_score": "70.00"
+      },
+      {
+        "id": "d1d26fd1-c51c-4588-ae6b-3a9249085198",
+        "title": "Splunk: A new process has been created",
+        "severity": "high",
+        "source": "splunk",
+        "source_rule_id": "4688",
+        "fired_at": "2026-06-23T03:15:34.000Z",
+        "risk_score": "70.00"
+      },
+      {
+        "id": "e7c97760-3a14-4ce1-9424-791562499ac8",
+        "title": "Splunk: A new process has been created",
+        "severity": "high",
+        "source": "splunk",
+        "source_rule_id": "4688",
+        "fired_at": "2026-06-23T03:15:35.000Z",
+        "risk_score": "70.00"
+      }
+    ],
+    "latestIncidents": [
+      {
+        "id": "4ce39e21-0420-4a46-ae03-26b0aa89bcab",
+        "title": "Failed MFA Challenge Spike",
+        "severity": "low",
+        "status": "closed",
+        "created_at": "2026-06-22T08:00:32.835Z"
+      },
+      {
+        "id": "f3710939-dc8c-4caf-9736-dfe700fdd532",
+        "title": "Suspicious outbound connections to TOR",
+        "severity": "medium",
+        "status": "recovered",
+        "created_at": "2026-06-22T08:00:32.829Z"
+      },
+      {
+        "id": "3d0a7f1e-f39d-4b1d-b1f7-9e665921c052",
+        "title": "Compromised service account svc-sql",
+        "severity": "high",
+        "status": "open",
+        "created_at": "2026-06-22T08:00:32.822Z"
+      },
+      {
+        "id": "2bf31b2f-d98e-493a-bfac-09af1ad2e8c2",
+        "title": "Ransomware staging on FIN-WS-04",
+        "severity": "critical",
+        "status": "investigating",
+        "created_at": "2026-06-22T08:00:32.804Z"
+      }
+    ]
+  },
+  "phase3_mitre": {
+    "total": 897,
+    "techniques": [
+      {
+        "technique_id": "T1059",
+        "count": 893
+      },
+      {
+        "technique_id": "T1110",
+        "count": 3
+      },
+      {
+        "technique_id": "T1078",
+        "count": 1
+      }
+    ]
+  },
+  "phase4_dashboard": {
+    "totalAlerts": 899,
+    "activeIncidents": 3,
+    "riskScore": 93,
+    "riskLevel": "CRITICAL",
+    "mttr": "0m",
+    "alertVolume": [
+      {
+        "hour": "2026-06-22T08:30:00.000+05:30",
+        "count": 1145
+      },
+      {
+        "hour": "2026-06-22T09:30:00.000+05:30",
+        "count": 2643
+      },
+      {
+        "hour": "2026-06-22T10:30:00.000+05:30",
+        "count": 2666
+      },
+      {
+        "hour": "2026-06-22T11:30:00.000+05:30",
+        "count": 58
+      },
+      {
+        "hour": "2026-06-22T12:30:00.000+05:30",
+        "count": 2534
+      },
+      {
+        "hour": "2026-06-22T13:30:00.000+05:30",
+        "count": 2652
+      },
+      {
+        "hour": "2026-06-22T14:30:00.000+05:30",
+        "count": 2407
+      },
+      {
+        "hour": "2026-06-22T15:30:00.000+05:30",
+        "count": 257
+      },
+      {
+        "hour": "2026-06-22T16:30:00.000+05:30",
+        "count": 11
+      },
+      {
+        "hour": "2026-06-22T17:30:00.000+05:30",
+        "count": 1257
+      },
+      {
+        "hour": "2026-06-22T18:30:00.000+05:30",
+        "count": 2770
+      },
+      {
+        "hour": "2026-06-22T19:30:00.000+05:30",
+        "count": 2142
+      },
+      {
+        "hour": "2026-06-22T20:30:00.000+05:30",
+        "count": 2444
+      },
+      {
+        "hour": "2026-06-22T21:30:00.000+05:30",
+        "count": 2393
+      },
+      {
+        "hour": "2026-06-22T22:30:00.000+05:30",
+        "count": 2451
+      },
+      {
+        "hour": "2026-06-22T23:30:00.000+05:30",
+        "count": 2398
+      },
+      {
+        "hour": "2026-06-23T00:30:00.000+05:30",
+        "count": 2355
+      },
+      {
+        "hour": "2026-06-23T01:30:00.000+05:30",
+        "count": 751
+      },
+      {
+        "hour": "2026-06-23T07:30:00.000+05:30",
+        "count": 1781
+      },
+      {
+        "hour": "2026-06-23T08:30:00.000+05:30",
+        "count": 801
+      }
+    ],
+    "topAttackingIps": [],
+    "liveAlertStream": [
+      {
+        "time": "2026-06-23T08:46:37.000+05:30",
+        "raw": "06/22/2026 08:16:37 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35905\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0xa04\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-regmon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+        "host": "DESKTOP-UQMISCF",
+        "source": "WinEventLog:Security",
+        "sourcetype": "WinEventLog:Security",
+        "eventCode": "4688",
+        "eventCodeDescription": "A new process has been created",
+        "user": "unknown",
+        "fields": {
+          "EventCode": "4688",
+          "Message": "A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0xa04\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-regmon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_bkt": "soc~1~305F7FD5-D924-4706-AA2C-5FA7F66B0797",
+          "_cd": "1:567300",
+          "_indextime": "1782184598",
+          "_pre_msg": "06/22/2026 08:16:37 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35905\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info",
+          "_raw": "06/22/2026 08:16:37 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35905\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0xa04\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-regmon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_serial": "0",
+          "_si": [
+            "Mouresh_Royal",
+            "soc"
+          ],
+          "_sourcetype": "WinEventLog:Security",
+          "_time": "2026-06-23T08:46:37.000+05:30",
+          "host": "DESKTOP-UQMISCF",
+          "index": "soc",
+          "linecount": "41",
+          "source": "WinEventLog:Security",
+          "sourcetype": "WinEventLog:Security",
+          "splunk_server": "Mouresh_Royal"
+        }
+      },
+      {
+        "time": "2026-06-23T08:46:35.000+05:30",
+        "raw": "06/22/2026 08:16:35 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35904\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1414\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+        "host": "DESKTOP-UQMISCF",
+        "source": "WinEventLog:Security",
+        "sourcetype": "WinEventLog:Security",
+        "eventCode": "4688",
+        "eventCodeDescription": "A new process has been created",
+        "user": "unknown",
+        "fields": {
+          "EventCode": "4688",
+          "Message": "A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1414\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_bkt": "soc~1~305F7FD5-D924-4706-AA2C-5FA7F66B0797",
+          "_cd": "1:567196",
+          "_indextime": "1782184596",
+          "_pre_msg": "06/22/2026 08:16:35 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35904\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info",
+          "_raw": "06/22/2026 08:16:35 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35904\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1414\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_serial": "1",
+          "_si": [
+            "Mouresh_Royal",
+            "soc"
+          ],
+          "_sourcetype": "WinEventLog:Security",
+          "_time": "2026-06-23T08:46:35.000+05:30",
+          "host": "DESKTOP-UQMISCF",
+          "index": "soc",
+          "linecount": "41",
+          "source": "WinEventLog:Security",
+          "sourcetype": "WinEventLog:Security",
+          "splunk_server": "Mouresh_Royal"
+        }
+      },
+      {
+        "time": "2026-06-23T08:46:34.000+05:30",
+        "raw": "06/22/2026 08:16:34 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35903\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0xb04\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+        "host": "DESKTOP-UQMISCF",
+        "source": "WinEventLog:Security",
+        "sourcetype": "WinEventLog:Security",
+        "eventCode": "4688",
+        "eventCodeDescription": "A new process has been created",
+        "user": "unknown",
+        "fields": {
+          "EventCode": "4688",
+          "Message": "A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0xb04\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_bkt": "soc~1~305F7FD5-D924-4706-AA2C-5FA7F66B0797",
+          "_cd": "1:567135",
+          "_indextime": "1782184595",
+          "_pre_msg": "06/22/2026 08:16:34 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35903\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info",
+          "_raw": "06/22/2026 08:16:34 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35903\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0xb04\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_serial": "2",
+          "_si": [
+            "Mouresh_Royal",
+            "soc"
+          ],
+          "_sourcetype": "WinEventLog:Security",
+          "_time": "2026-06-23T08:46:34.000+05:30",
+          "host": "DESKTOP-UQMISCF",
+          "index": "soc",
+          "linecount": "41",
+          "source": "WinEventLog:Security",
+          "sourcetype": "WinEventLog:Security",
+          "splunk_server": "Mouresh_Royal"
+        }
+      },
+      {
+        "time": "2026-06-23T08:46:32.000+05:30",
+        "raw": "06/22/2026 08:16:32 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35902\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x7cc\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-admon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+        "host": "DESKTOP-UQMISCF",
+        "source": "WinEventLog:Security",
+        "sourcetype": "WinEventLog:Security",
+        "eventCode": "4688",
+        "eventCodeDescription": "A new process has been created",
+        "user": "unknown",
+        "fields": {
+          "EventCode": "4688",
+          "Message": "A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x7cc\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-admon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_bkt": "soc~1~305F7FD5-D924-4706-AA2C-5FA7F66B0797",
+          "_cd": "1:567074",
+          "_indextime": "1782184593",
+          "_pre_msg": "06/22/2026 08:16:32 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35902\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info",
+          "_raw": "06/22/2026 08:16:32 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35902\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x7cc\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-admon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_serial": "3",
+          "_si": [
+            "Mouresh_Royal",
+            "soc"
+          ],
+          "_sourcetype": "WinEventLog:Security",
+          "_time": "2026-06-23T08:46:32.000+05:30",
+          "host": "DESKTOP-UQMISCF",
+          "index": "soc",
+          "linecount": "41",
+          "source": "WinEventLog:Security",
+          "sourcetype": "WinEventLog:Security",
+          "splunk_server": "Mouresh_Royal"
+        }
+      },
+      {
+        "time": "2026-06-23T08:46:31.000+05:30",
+        "raw": "06/22/2026 08:16:31 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35901\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0xc08\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-netmon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+        "host": "DESKTOP-UQMISCF",
+        "source": "WinEventLog:Security",
+        "sourcetype": "WinEventLog:Security",
+        "eventCode": "4688",
+        "eventCodeDescription": "A new process has been created",
+        "user": "unknown",
+        "fields": {
+          "EventCode": "4688",
+          "Message": "A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0xc08\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-netmon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_bkt": "soc~1~305F7FD5-D924-4706-AA2C-5FA7F66B0797",
+          "_cd": "1:567013",
+          "_indextime": "1782184592",
+          "_pre_msg": "06/22/2026 08:16:31 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35901\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info",
+          "_raw": "06/22/2026 08:16:31 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35901\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0xc08\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-netmon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_serial": "4",
+          "_si": [
+            "Mouresh_Royal",
+            "soc"
+          ],
+          "_sourcetype": "WinEventLog:Security",
+          "_time": "2026-06-23T08:46:31.000+05:30",
+          "host": "DESKTOP-UQMISCF",
+          "index": "soc",
+          "linecount": "41",
+          "source": "WinEventLog:Security",
+          "sourcetype": "WinEventLog:Security",
+          "splunk_server": "Mouresh_Royal"
+        }
+      },
+      {
+        "time": "2026-06-23T08:46:30.000+05:30",
+        "raw": "06/22/2026 08:16:30 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35900\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1460\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-MonitorNoHandle.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+        "host": "DESKTOP-UQMISCF",
+        "source": "WinEventLog:Security",
+        "sourcetype": "WinEventLog:Security",
+        "eventCode": "4688",
+        "eventCodeDescription": "A new process has been created",
+        "user": "unknown",
+        "fields": {
+          "EventCode": "4688",
+          "Message": "A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1460\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-MonitorNoHandle.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_bkt": "soc~1~305F7FD5-D924-4706-AA2C-5FA7F66B0797",
+          "_cd": "1:566952",
+          "_indextime": "1782184592",
+          "_pre_msg": "06/22/2026 08:16:30 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35900\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info",
+          "_raw": "06/22/2026 08:16:30 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35900\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1460\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-MonitorNoHandle.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_serial": "5",
+          "_si": [
+            "Mouresh_Royal",
+            "soc"
+          ],
+          "_sourcetype": "WinEventLog:Security",
+          "_time": "2026-06-23T08:46:30.000+05:30",
+          "host": "DESKTOP-UQMISCF",
+          "index": "soc",
+          "linecount": "41",
+          "source": "WinEventLog:Security",
+          "sourcetype": "WinEventLog:Security",
+          "splunk_server": "Mouresh_Royal"
+        }
+      },
+      {
+        "time": "2026-06-23T08:46:09.000+05:30",
+        "raw": "06/22/2026 08:16:09 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35899\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-5-19\r\n\tAccount Name:\t\tLOCAL SERVICE\r\n\tAccount Domain:\t\tNT AUTHORITY\r\n\tLogon ID:\t\t0x3E5\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x4c0\r\n\tNew Process Name:\tC:\\Windows\\System32\\svchost.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0x2c8\r\n\tCreator Process Name:\tC:\\Windows\\System32\\services.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+        "host": "DESKTOP-UQMISCF",
+        "source": "WinEventLog:Security",
+        "sourcetype": "WinEventLog:Security",
+        "eventCode": "4688",
+        "eventCodeDescription": "A new process has been created",
+        "user": "unknown",
+        "fields": {
+          "EventCode": "4688",
+          "Message": "A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-5-19\r\n\tAccount Name:\t\tLOCAL SERVICE\r\n\tAccount Domain:\t\tNT AUTHORITY\r\n\tLogon ID:\t\t0x3E5\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x4c0\r\n\tNew Process Name:\tC:\\Windows\\System32\\svchost.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0x2c8\r\n\tCreator Process Name:\tC:\\Windows\\System32\\services.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_bkt": "soc~1~305F7FD5-D924-4706-AA2C-5FA7F66B0797",
+          "_cd": "1:566806",
+          "_indextime": "1782184570",
+          "_pre_msg": "06/22/2026 08:16:09 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35899\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info",
+          "_raw": "06/22/2026 08:16:09 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35899\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-5-19\r\n\tAccount Name:\t\tLOCAL SERVICE\r\n\tAccount Domain:\t\tNT AUTHORITY\r\n\tLogon ID:\t\t0x3E5\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x4c0\r\n\tNew Process Name:\tC:\\Windows\\System32\\svchost.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0x2c8\r\n\tCreator Process Name:\tC:\\Windows\\System32\\services.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_serial": "6",
+          "_si": [
+            "Mouresh_Royal",
+            "soc"
+          ],
+          "_sourcetype": "WinEventLog:Security",
+          "_time": "2026-06-23T08:46:09.000+05:30",
+          "host": "DESKTOP-UQMISCF",
+          "index": "soc",
+          "linecount": "41",
+          "source": "WinEventLog:Security",
+          "sourcetype": "WinEventLog:Security",
+          "splunk_server": "Mouresh_Royal"
+        }
+      },
+      {
+        "time": "2026-06-23T08:45:37.000+05:30",
+        "raw": "06/22/2026 08:15:37 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35898\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1650\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-regmon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+        "host": "DESKTOP-UQMISCF",
+        "source": "WinEventLog:Security",
+        "sourcetype": "WinEventLog:Security",
+        "eventCode": "4688",
+        "eventCodeDescription": "A new process has been created",
+        "user": "unknown",
+        "fields": {
+          "EventCode": "4688",
+          "Message": "A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1650\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-regmon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_bkt": "soc~1~305F7FD5-D924-4706-AA2C-5FA7F66B0797",
+          "_cd": "1:566606",
+          "_indextime": "1782184538",
+          "_pre_msg": "06/22/2026 08:15:37 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35898\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info",
+          "_raw": "06/22/2026 08:15:37 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35898\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1650\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-regmon.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_serial": "7",
+          "_si": [
+            "Mouresh_Royal",
+            "soc"
+          ],
+          "_sourcetype": "WinEventLog:Security",
+          "_time": "2026-06-23T08:45:37.000+05:30",
+          "host": "DESKTOP-UQMISCF",
+          "index": "soc",
+          "linecount": "41",
+          "source": "WinEventLog:Security",
+          "sourcetype": "WinEventLog:Security",
+          "splunk_server": "Mouresh_Royal"
+        }
+      },
+      {
+        "time": "2026-06-23T08:45:35.000+05:30",
+        "raw": "06/22/2026 08:15:35 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35897\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1094\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+        "host": "DESKTOP-UQMISCF",
+        "source": "WinEventLog:Security",
+        "sourcetype": "WinEventLog:Security",
+        "eventCode": "4688",
+        "eventCodeDescription": "A new process has been created",
+        "user": "unknown",
+        "fields": {
+          "EventCode": "4688",
+          "Message": "A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1094\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_bkt": "soc~1~305F7FD5-D924-4706-AA2C-5FA7F66B0797",
+          "_cd": "1:566502",
+          "_indextime": "1782184536",
+          "_pre_msg": "06/22/2026 08:15:35 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35897\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info",
+          "_raw": "06/22/2026 08:15:35 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35897\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1094\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_serial": "8",
+          "_si": [
+            "Mouresh_Royal",
+            "soc"
+          ],
+          "_sourcetype": "WinEventLog:Security",
+          "_time": "2026-06-23T08:45:35.000+05:30",
+          "host": "DESKTOP-UQMISCF",
+          "index": "soc",
+          "linecount": "41",
+          "source": "WinEventLog:Security",
+          "sourcetype": "WinEventLog:Security",
+          "splunk_server": "Mouresh_Royal"
+        }
+      },
+      {
+        "time": "2026-06-23T08:45:34.000+05:30",
+        "raw": "06/22/2026 08:15:34 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35896\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1528\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+        "host": "DESKTOP-UQMISCF",
+        "source": "WinEventLog:Security",
+        "sourcetype": "WinEventLog:Security",
+        "eventCode": "4688",
+        "eventCodeDescription": "A new process has been created",
+        "user": "unknown",
+        "fields": {
+          "EventCode": "4688",
+          "Message": "A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1528\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_bkt": "soc~1~305F7FD5-D924-4706-AA2C-5FA7F66B0797",
+          "_cd": "1:566441",
+          "_indextime": "1782184535",
+          "_pre_msg": "06/22/2026 08:15:34 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35896\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info",
+          "_raw": "06/22/2026 08:15:34 PM\nLogName=Security\nEventCode=4688\nEventType=0\nComputerName=DESKTOP-UQMISCF\nSourceName=Microsoft Windows security auditing.\nType=Information\nRecordNumber=35896\nKeywords=Audit Success\nTaskCategory=Process Creation\nOpCode=Info\nMessage=A new process has been created.\r\n\r\nCreator Subject:\r\n\tSecurity ID:\t\tS-1-5-18\r\n\tAccount Name:\t\tDESKTOP-UQMISCF$\r\n\tAccount Domain:\t\tWORKGROUP\r\n\tLogon ID:\t\t0x3E7\r\n\r\nTarget Subject:\r\n\tSecurity ID:\t\tS-1-0-0\r\n\tAccount Name:\t\t-\r\n\tAccount Domain:\t\t-\r\n\tLogon ID:\t\t0x0\r\n\r\nProcess Information:\r\n\tNew Process ID:\t\t0x1528\r\n\tNew Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunk-powershell.exe\r\n\tToken Elevation Type:\t%%1936\r\n\tMandatory Label:\t\tS-1-16-16384\r\n\tCreator Process ID:\t0xe08\r\n\tCreator Process Name:\tC:\\Program Files\\SplunkUniversalForwarder\\bin\\splunkd.exe\r\n\tProcess Command Line:\t\r\n\r\nToken Elevation Type indicates the type of token that was assigned to the new process in accordance with User Account Control policy.\r\n\r\nType 1 is a full token with no privileges removed or groups disabled.  A full token is only used if User Account Control is disabled or if the user is the built-in Administrator account or a service account.\r\n\r\nType 2 is an elevated token with no privileges removed or groups disabled.  An elevated token is used when User Account Control is enabled and the user chooses to start the program using Run as administrator.  An elevated token is also used when an application is configured to always require administrative privilege or to always require maximum privilege, and the user is a member of the Administrators group.\r\n\r\nType 3 is a limited token with administrative privileges removed and administrative groups disabled.  The limited token is used when User Account Control is enabled, the application does not require administrative privilege, and the user does not choose to start the program using Run as administrator.",
+          "_serial": "9",
+          "_si": [
+            "Mouresh_Royal",
+            "soc"
+          ],
+          "_sourcetype": "WinEventLog:Security",
+          "_time": "2026-06-23T08:45:34.000+05:30",
+          "host": "DESKTOP-UQMISCF",
+          "index": "soc",
+          "linecount": "41",
+          "source": "WinEventLog:Security",
+          "sourcetype": "WinEventLog:Security",
+          "splunk_server": "Mouresh_Royal"
+        }
+      }
+    ],
+    "topSourceIps": [
+      {
+        "ip": "192.168.1.100",
+        "count": 1
+      },
+      {
+        "ip": "192.168.100.45",
+        "count": 1
+      },
+      {
+        "ip": "10.0.12.85",
+        "count": 1
+      }
+    ],
+    "mitreDistribution": [
+      {
+        "techniqueId": "T1059",
+        "name": "Command and Scripting Interpreter",
+        "count": 893
+      },
+      {
+        "techniqueId": "T1110",
+        "name": "Brute Force",
+        "count": 3
+      },
+      {
+        "techniqueId": "T1078",
+        "name": "Valid Accounts",
+        "count": 1
+      }
+    ],
+    "recentIncidents": [
+      {
+        "id": "4ce39e21-0420-4a46-ae03-26b0aa89bcab",
+        "title": "Failed MFA Challenge Spike",
+        "severity": "low",
+        "status": "closed",
+        "createdAt": "2026-06-22T08:00:32.835Z"
+      },
+      {
+        "id": "f3710939-dc8c-4caf-9736-dfe700fdd532",
+        "title": "Suspicious outbound connections to TOR",
+        "severity": "medium",
+        "status": "recovered",
+        "createdAt": "2026-06-22T08:00:32.829Z"
+      },
+      {
+        "id": "3d0a7f1e-f39d-4b1d-b1f7-9e665921c052",
+        "title": "Compromised service account svc-sql",
+        "severity": "high",
+        "status": "open",
+        "createdAt": "2026-06-22T08:00:32.822Z"
+      },
+      {
+        "id": "2bf31b2f-d98e-493a-bfac-09af1ad2e8c2",
+        "title": "Ransomware staging on FIN-WS-04",
+        "severity": "critical",
+        "status": "investigating",
+        "createdAt": "2026-06-22T08:00:32.804Z"
+      }
+    ],
+    "alertTrends": [
+      {
+        "hour": "08:30 am",
+        "count": 1
+      },
+      {
+        "hour": "12:30 pm",
+        "count": 1
+      },
+      {
+        "hour": "11:30 pm",
+        "count": 72
+      },
+      {
+        "hour": "12:30 am",
+        "count": 292
+      },
+      {
+        "hour": "01:30 am",
+        "count": 127
+      },
+      {
+        "hour": "07:30 am",
+        "count": 309
+      },
+      {
+        "hour": "08:30 am",
+        "count": 96
+      }
+    ]
+  },
+  "phase5_email": {
+    "status": "SKIPPED",
+    "reason": "SMTP_HOST/USER/PASS not set"
+  },
+  "phase6_pdf": {
+    "filePath": "C:\\Users\\mouri\\OneDrive\\Tài liệu\\SOCVision-AI\\backend\\reports\\socvision-daily-2026-06-23T03-16-44.pdf",
+    "alertCount": 898,
+    "incidentCount": 4
+  },
+  "summary": [
+    {
+      "label": "Splunk: Total events (last 24h)",
+      "status": "PASS",
+      "detail": "35906 events"
+    },
+    {
+      "label": "Splunk: EventCode 4625 (Failed Logon)",
+      "status": "PASS",
+      "detail": "1 events"
+    },
+    {
+      "label": "Splunk: EventCode 4740 (Account Lockout)",
+      "status": "PASS",
+      "detail": "0 events"
+    },
+    {
+      "label": "Splunk: EventCode 4672 (Special Privileges)",
+      "status": "PASS",
+      "detail": "63 events"
+    },
+    {
+      "label": "Splunk: EventCode 4688 (Process Creation)",
+      "status": "PASS",
+      "detail": "5487 events"
+    },
+    {
+      "label": "PostgreSQL connection",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "label": "alerts table has data",
+      "status": "PASS",
+      "detail": "899 alerts"
+    },
+    {
+      "label": "incidents table accessible",
+      "status": "PASS",
+      "detail": "4 incidents"
+    },
+    {
+      "label": "ai_analysis table accessible",
+      "status": "PASS",
+      "detail": "38 analyses"
+    },
+    {
+      "label": "MITRE techniques seeded",
+      "status": "PASS",
+      "detail": "6 techniques seeded"
+    },
+    {
+      "label": "MITRE technique T1110 exists",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "label": "MITRE technique T1078 exists",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "label": "MITRE technique T1059 exists",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "label": "MITRE mapping total",
+      "status": "PASS",
+      "detail": "897 mappings in alert_mitre_mapping"
+    },
+    {
+      "label": "Dashboard.totalAlerts",
+      "status": "PASS",
+      "detail": "899"
+    },
+    {
+      "label": "Dashboard.activeIncidents",
+      "status": "PASS",
+      "detail": "3"
+    },
+    {
+      "label": "Dashboard.riskScore",
+      "status": "PASS",
+      "detail": "93"
+    },
+    {
+      "label": "Dashboard.mttr",
+      "status": "PASS",
+      "detail": "0m"
+    },
+    {
+      "label": "Dashboard.alertVolume",
+      "status": "PASS",
+      "detail": "20 data points"
+    },
+    {
+      "label": "Dashboard.topAttackingIps",
+      "status": "PASS",
+      "detail": "0 IPs"
+    },
+    {
+      "label": "Dashboard.totalAlerts matches DB count",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "label": "EmailService loaded (SMTP not configured)",
+      "status": "PASS",
+      "detail": "Set SMTP_* env vars to enable"
+    },
+    {
+      "label": "PDF report generated",
+      "status": "PASS",
+      "detail": "C:\\Users\\mouri\\OneDrive\\Tài liệu\\SOCVision-AI\\backend\\reports\\socvision-daily-2026-06-23T03-16-44.pdf"
+    },
+    {
+      "label": "PDF report data",
+      "status": "PASS",
+      "detail": "898 alerts, 4 incidents, MTTR: N/A"
+    }
+  ]
+}

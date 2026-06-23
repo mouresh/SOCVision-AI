@@ -61,7 +61,16 @@ export class MitreService {
          ON CONFLICT (alert_id, technique_id) DO NOTHING`,
         [alertId, techniqueUuid, 85]
       );
-      logger.debug({ alertId, techniqueId: mapping.techniqueId }, 'mitre-service: technique assigned');
+      
+      // Update alerts enrichment JSONB field
+      await query(
+        `UPDATE alerts
+         SET enrichment = COALESCE(enrichment, '{}'::jsonb) || jsonb_build_object('technique_id', $1::text, 'technique', $2::text)
+         WHERE id = $3`,
+        [mapping.techniqueId, mapping.name, alertId]
+      );
+
+      logger.debug({ alertId, techniqueId: mapping.techniqueId }, 'mitre-service: technique assigned and alert enrichment updated');
     } catch (err: any) {
       logger.error({ err: err.message, alertId, eventCode }, 'mitre-service: assignment failed');
     }
