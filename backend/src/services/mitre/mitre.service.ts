@@ -1,15 +1,15 @@
-﻿import { query } from '../../config/database';
+import { query } from '../../config/database';
 import { logger } from '../../config/logger';
 
 const EVENT_CODE_TO_MITRE: Record<string, { techniqueId: string; name: string; tactic: string; platforms: string[] }> = {
-  '4625': { techniqueId: 'T1110', name: 'Brute Force', tactic: 'credential-access', platforms: ['Windows'] },
-  '4740': { techniqueId: 'T1110', name: 'Brute Force', tactic: 'credential-access', platforms: ['Windows'] },
-  '4672': { techniqueId: 'T1078', name: 'Valid Accounts', tactic: 'defense-evasion', platforms: ['Windows', 'Linux', 'macOS'] },
+  '4625': { techniqueId: 'T1110', name: 'Brute Force', tactic: 'credential_access', platforms: ['Windows'] },
+  '4740': { techniqueId: 'T1110', name: 'Brute Force', tactic: 'credential_access', platforms: ['Windows'] },
+  '4672': { techniqueId: 'T1078', name: 'Valid Accounts', tactic: 'defense_evasion', platforms: ['Windows', 'Linux', 'macOS'] },
   '4720': { techniqueId: 'T1136', name: 'Create Account', tactic: 'persistence', platforms: ['Windows'] },
   '4728': { techniqueId: 'T1098', name: 'Account Manipulation', tactic: 'persistence', platforms: ['Windows'] },
   '4688': { techniqueId: 'T1059', name: 'Command and Scripting Interpreter', tactic: 'execution', platforms: ['Windows'] },
   '7045': { techniqueId: 'T1543', name: 'Create or Modify System Process', tactic: 'persistence', platforms: ['Windows'] },
-  '4624': { techniqueId: 'T1078', name: 'Valid Accounts', tactic: 'initial-access', platforms: ['Windows'] },
+  '4624': { techniqueId: 'T1078', name: 'Valid Accounts', tactic: 'initial_access', platforms: ['Windows'] },
 };
 
 export class MitreService {
